@@ -1,0 +1,10 @@
+[package]
+name = "gtw-rs-sdk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reqwest = "0.12.7"
+serde = "1.0.209"
+serde_json = "1.0.127"
+tokio = "1.39.3"
