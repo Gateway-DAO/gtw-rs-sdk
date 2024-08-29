@@ -21,7 +21,7 @@ impl GTW_API {
     }
 
     pub async fn me(&self) -> Result<models::ModelMyAccountResponse, GTWError> {
-        let url = format!("{}/me", BASE_URL);
+        let url = format!("{}/accounts/me", BASE_URL);
         let response = self
             .client
             .get(&url)

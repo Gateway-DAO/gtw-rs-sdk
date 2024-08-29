@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Generate and print Rust type definitions
     let rust_defs = type_space.to_stream().to_string();
     let folder_name = "src/models";
-    let file_name = "generated_models.rs";
+    let file_name = "mod.rs";
     let file_path = Path::new(folder_name).join(file_name);
     let mut file = fs::File::create(file_path)?;
     file.write_all(rust_defs.as_bytes())?;
