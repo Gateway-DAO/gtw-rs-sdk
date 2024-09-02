@@ -1,6 +1,6 @@
 SCRIPT_PATH = scripts/generate_types.rs
 
-run:
+generate:
 	rust-script $(SCRIPT_PATH)
 
 
