@@ -4,6 +4,10 @@ generate:
 	rust-script $(SCRIPT_PATH)
 
 
+example:
+	cargo run --example  example
+
+
 chmod:
 	chmod +x $(SCRIPT_PATH)
 
@@ -11,4 +15,4 @@ chmod:
 clean:
 	rm -rf src/models/mod.rs
 
-.PHONY: run chmod clean
+.PHONY: generate example chmod clean
