@@ -1,14 +1,18 @@
+use dotenv::dotenv;
 use gtw_rs_sdk::GTW_API;
+use std::env;
 use tokio;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let bearer_token = "".to_string(); //put your token over here
+    dotenv().ok();
+
+    let bearer_token = env::var("BEARER_TOKEN").expect("SCHEMA_URL is not set"); //put your token over here
     let gtw_api = GTW_API::new(bearer_token)?;
 
     match gtw_api.me().await {
         Ok(account_info) => {
-            println!("Account Info: {:?}", account_info);
+            println!("Account Info: {:?}", account_info.did);
         }
         Err(e) => {
             eprintln!("Failed to get account info: {}", e);
