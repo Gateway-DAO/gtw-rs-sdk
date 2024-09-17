@@ -12,7 +12,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match gtw_api.me().await {
         Ok(account_info) => {
-            println!("Account Info: {:?}", account_info.did);
+            println!("Account Info: {:?}", account_info.did.unwrap());
         }
         Err(e) => {
             eprintln!("Failed to get account info: {}", e);

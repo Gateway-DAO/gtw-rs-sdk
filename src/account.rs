@@ -12,7 +12,7 @@ impl GTW_API {
         })
     }
 
-    pub async fn me(&self) -> Result<models::ModelMyAccountResponse, GTWError> {
+    pub async fn account_info(&self) -> Result<models::ModelMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me", BASE_URL);
         let response = self
             .client
@@ -27,18 +27,18 @@ impl GTW_API {
         Ok(json_response)
     }
 
-    pub async fn add_funds(
+    pub async fn update_account_info(
         &self,
-        account_id: f64,
-        amount: f64,
-    ) -> Result<models::ModelAccountLedgerAddRequest, GTWError> {
-        let url = format!("{}/accounts/{}/add-funds", BASE_URL, account_id);
+        profile_picture: String,
+        username: String,
+    ) -> Result<models::ModelMyAccountResponse, GTWError> {
+        let url = format!("{}/accounts/me", BASE_URL);
 
-        let body = json!({ "amount": amount });
+        let body = json!({"profile_picture" : profile_picture , "username" : username});
 
         let response = self
             .client
-            .post(&url)
+            .patch(&url)
             .bearer_auth(&self.bearer_token)
             .header("Content-Type", "application/json")
             .body(body.to_string())
@@ -46,9 +46,7 @@ impl GTW_API {
             .await?;
 
         let body = response.text().await?;
-        println!("Response Body: {}", body);
-
-        let json_response: models::ModelAccountLedgerAddRequest = serde_json::from_str(&body)?;
+        let json_response: models::ModelMyAccountResponse = serde_json::from_str(&body)?;
 
         Ok(json_response)
     }
