@@ -1,6 +1,7 @@
 use reqwest::Client;
 mod account;
 mod auth;
+mod data_model;
 pub mod models;
 mod utils;
 pub const BASE_URL: &str = "https://dev.api.gateway.tech";

@@ -135,13 +135,17 @@ impl From<&HelperMeta> for HelperMeta {
 #[doc = r" ```"]
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct HelperPaginatedResponse {
-    pub data: serde_json::Value,
+pub struct HelperPaginatedResponse<T> {
+    pub data: T, // Generic type T for the data field
     pub links: HelperLinks,
     pub meta: HelperMeta,
 }
-impl From<&HelperPaginatedResponse> for HelperPaginatedResponse {
-    fn from(value: &HelperPaginatedResponse) -> Self {
+
+impl<T> From<&HelperPaginatedResponse<T>> for HelperPaginatedResponse<T>
+where
+    T: Clone, // Ensure T implements Clone to support the From trait
+{
+    fn from(value: &HelperPaginatedResponse<T>) -> Self {
         value.clone()
     }
 }
