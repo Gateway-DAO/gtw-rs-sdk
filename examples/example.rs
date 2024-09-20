@@ -1,5 +1,5 @@
 use dotenv::dotenv;
-use gtw_rs_sdk::GTW_API;
+use gtw_rs_sdk::GtwApi;
 use std::env;
 use tokio;
 
@@ -8,9 +8,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
     let bearer_token = env::var("BEARER_TOKEN").expect("SCHEMA_URL is not set"); //put your token over here
-    let gtw_api = GTW_API::new(bearer_token)?;
+    let gtw_api = GtwApi::new(bearer_token)?;
 
-    match gtw_api.me().await {
+    match gtw_api.account_info().await {
         Ok(account_info) => {
             println!("Account Info: {:?}", account_info.did.unwrap());
         }
@@ -19,15 +19,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    let account_id = 123.0;
-    let amount = 50.0;
-
-    match gtw_api.add_funds(account_id, amount).await {
-        Ok(ledger_response) => {
-            println!("Add Funds Response: {:?}", ledger_response);
+    match gtw_api.update_account_info("hello", "r11manish").await {
+        Ok(update_account_info) => {
+            println!("Account Info: {:?}", update_account_info.username.unwrap());
         }
         Err(e) => {
-            eprintln!("Failed to add funds: {}", e);
+            eprintln!("Failed to get account info: {}", e);
         }
     }
 

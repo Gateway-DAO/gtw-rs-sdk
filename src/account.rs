@@ -1,31 +1,9 @@
-use super::{models, BASE_URL, GTW_API};
+use super::{models, GtwApi, BASE_URL};
 use crate::utils::error::GTWError;
 use reqwest::Response;
 use serde_json::json;
 
-impl GTW_API {
-    pub fn new(bearer_token: String) -> Result<Self, reqwest::Error> {
-        let client = reqwest::Client::builder()
-            .default_headers({
-                let mut headers = reqwest::header::HeaderMap::new();
-                headers.insert(
-                    reqwest::header::AUTHORIZATION,
-                    format!("Bearer {}", bearer_token).parse().unwrap(),
-                );
-                headers.insert(
-                    reqwest::header::CONTENT_TYPE,
-                    "application/json".parse().unwrap(),
-                );
-                headers
-            })
-            .build()?;
-
-        Ok(GTW_API {
-            client,
-            bearer_token,
-        })
-    }
-
+impl GtwApi {
     async fn handle_response<T: serde::de::DeserializeOwned>(
         response: Response,
     ) -> Result<T, GTWError> {
@@ -84,8 +62,8 @@ impl GTW_API {
 
     pub async fn update_account_info(
         &self,
-        profile_picture: String,
-        username: String,
+        profile_picture: &str,
+        username: &str,
     ) -> Result<models::ModelMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me", BASE_URL);
 
