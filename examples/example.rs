@@ -21,7 +21,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match gtw_api.update_account_info("hello", "r11manish").await {
         Ok(update_account_info) => {
-            println!("Account Info: {:?}", update_account_info.username.unwrap());
+            println!(
+                " Update Account Info: {:?}",
+                update_account_info.username.unwrap()
+            );
+        }
+        Err(e) => {
+            eprintln!("Failed to get account info: {}", e);
+        }
+    }
+
+    match gtw_api.generate_message().await {
+        Ok(generate_message) => {
+            println!("Message Generated: {:?}", generate_message.message);
         }
         Err(e) => {
             eprintln!("Failed to get account info: {}", e);

@@ -1,28 +1,8 @@
 use super::{models, GtwApi, BASE_URL};
-use crate::utils::error::GTWError;
-use reqwest::Response;
+use crate::utils::{error::GTWError, handle_response::handle_response};
 use serde_json::json;
 
 impl GtwApi {
-    async fn handle_response<T: serde::de::DeserializeOwned>(
-        response: Response,
-    ) -> Result<T, GTWError> {
-        let status = response.status();
-        let body = response
-            .text()
-            .await
-            .map_err(|e| GTWError::UnexpectedError(e.to_string()))?;
-
-        if !status.is_success() {
-            return Err(GTWError::ApiError {
-                status: status.as_u16(),
-                message: body,
-            });
-        }
-
-        serde_json::from_str(&body).map_err(GTWError::JsonError)
-    }
-
     pub async fn create_account(
         &self,
         account_details: models::ModelAccountCreateRequest,
@@ -44,7 +24,7 @@ impl GtwApi {
             .await
             .map_err(GTWError::NetworkError)?;
 
-        Self::handle_response(response).await
+        handle_response(response).await
     }
 
     pub async fn account_info(&self) -> Result<models::ModelMyAccountResponse, GTWError> {
@@ -57,7 +37,7 @@ impl GtwApi {
             .await
             .map_err(GTWError::NetworkError)?;
 
-        Self::handle_response(response).await
+        handle_response(response).await
     }
 
     pub async fn update_account_info(
@@ -80,6 +60,6 @@ impl GtwApi {
             .await
             .map_err(GTWError::NetworkError)?;
 
-        Self::handle_response(response).await
+        handle_response(response).await
     }
 }
