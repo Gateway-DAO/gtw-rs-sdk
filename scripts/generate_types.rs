@@ -16,6 +16,7 @@ use std::env;
 use std::fs;
 use std::io::Write;
 use std::path::Path;
+use std::process::Command;
 use typify::{TypeSpace, TypeSpaceSettings};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -36,17 +37,23 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let header = "use serde::{Deserialize, Serialize};\n\n";
 
-    let folder_name = "src/models";
+    let folder_name = "src/types";
     fs::create_dir_all(folder_name)?;
 
     let file_name = "mod.rs";
     let file_path = Path::new(folder_name).join(file_name);
 
-    let mut file = fs::File::create(file_path)?;
+    let mut file = fs::File::create(&file_path)?;
     file.write_all(header.as_bytes())?;
     file.write_all(rust_defs.as_bytes())?;
 
-    println!("File created and written to successfully.");
+    // Format the generated file using rustfmt
+    Command::new("rustfmt")
+        .arg(file_path)
+        .status()
+        .expect("Failed to execute rustfmt");
+
+    println!("File created, written, and formatted successfully.");
 
     Ok(())
 }

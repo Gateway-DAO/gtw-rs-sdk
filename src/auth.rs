@@ -1,12 +1,12 @@
-use super::{models, GtwApi, BASE_URL};
+use super::{types::*, GtwApi, BASE_URL};
 use crate::utils::{error::GTWError, handle_response::handle_response};
 use serde_json::json;
 
 impl GtwApi {
     pub async fn login(
         &self,
-        login_credetials: models::ModelAuthRequest,
-    ) -> Result<models::ModelTokenResponse, GTWError> {
+        login_credetials: ModelAuthRequest,
+    ) -> Result<ModelTokenResponse, GTWError> {
         let url = format!("{}/auth", BASE_URL);
 
         let body = json!({
@@ -26,7 +26,7 @@ impl GtwApi {
         handle_response(response).await
     }
 
-    pub async fn generate_message(&self) -> Result<models::ModelMessageResponse, GTWError> {
+    pub async fn generate_message(&self) -> Result<ModelMessageResponse, GTWError> {
         let url = format!("{}/auth/message", BASE_URL);
 
         let response = self
@@ -39,7 +39,7 @@ impl GtwApi {
         handle_response(response).await
     }
 
-    pub async fn generate_refresh_token(&self) -> Result<models::ModelTokenResponse, GTWError> {
+    pub async fn generate_refresh_token(&self) -> Result<ModelTokenResponse, GTWError> {
         let url = format!("{}/auth/refresh-token", BASE_URL);
         let response = self
             .client
