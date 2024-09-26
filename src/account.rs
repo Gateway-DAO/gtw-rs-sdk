@@ -1,8 +1,8 @@
-use super::{types::*, GtwApi, BASE_URL};
+use super::{types::*, GtwSdk, BASE_URL};
 use crate::utils::{error::GTWError, handle_response::handle_response};
 use serde_json::json;
 
-impl GtwApi {
+impl GtwSdk {
     pub async fn create_account(
         &self,
         account_details: ModelAccountCreateRequest,

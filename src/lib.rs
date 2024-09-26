@@ -6,11 +6,11 @@ pub mod types;
 mod utils;
 pub const BASE_URL: &str = "https://dev.api.gateway.tech";
 
-pub struct GtwApi {
+pub struct GtwSdk {
     client: Client,
 }
 
-impl GtwApi {
+impl GtwSdk {
     pub fn new(bearer_token: String) -> Result<Self, reqwest::Error> {
         let client = reqwest::Client::builder()
             .default_headers({
@@ -27,6 +27,6 @@ impl GtwApi {
             })
             .build()?;
 
-        Ok(GtwApi { client })
+        Ok(GtwSdk { client })
     }
 }

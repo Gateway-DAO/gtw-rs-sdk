@@ -1,7 +1,7 @@
-use super::{types::*, GtwApi, BASE_URL};
+use super::{types::*, GtwSdk, BASE_URL};
 use crate::utils::{error::GTWError, handle_response::handle_response};
 
-impl GtwApi {
+impl GtwSdk {
     pub async fn get_data_models(
         &self,
         page: Option<u64>,
