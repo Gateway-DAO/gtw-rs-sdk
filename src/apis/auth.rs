@@ -1,5 +1,5 @@
 use crate::{
-    models::{self},
+    models::*,
     utils::{error::*, handle_response::handle_response},
     GtwSDK, BASE_URL,
 };
