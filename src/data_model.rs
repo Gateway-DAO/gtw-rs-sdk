@@ -6,7 +6,7 @@ impl GtwSdk {
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
+    ) -> Result<ModifiedHelperPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
         let url = format!("{}/data-models", BASE_URL);
 
         let mut query_params = vec![];
@@ -32,7 +32,7 @@ impl GtwSdk {
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
+    ) -> Result<ModifiedHelperPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
         let url = format!("{}/data-models/me", BASE_URL);
 
         let mut query_params = vec![];

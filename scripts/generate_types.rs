@@ -36,6 +36,42 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let rust_defs = type_space.to_stream().to_string();
 
     let header = "use serde::{Deserialize, Serialize};\n\n";
+    let footer = "#[doc = \"ModifiedHelperPaginatedResponse\"]\n\
+#[doc = r\"\"]\n\
+#[doc = r\" <details><summary>JSON schema</summary>\"]\n\
+#[doc = r\"\"]\n\
+#[doc = r\" ```json\"]\n\
+#[doc = \"{\"]\n\
+#[doc = \"  \\\"type\\\": \\\"object\\\",\"]\n\
+#[doc = \"  \\\"required\\\": [\"]\n\
+#[doc = \"    \\\"data\\\",\"]\n\
+#[doc = \"    \\\"links\\\",\"]\n\
+#[doc = \"    \\\"meta\\\"\"]\n\
+#[doc = \"  ],\"]\n\
+#[doc = \"  \\\"properties\\\": {\"]\n\
+#[doc = \"    \\\"data\\\": {},\"]\n\
+#[doc = \"    \\\"links\\\": {\"]\n\
+#[doc = \"      \\\"$ref\\\": \\\"#/definitions/helper.Links\\\"\"]\n\
+#[doc = \"    },\"]\n\
+#[doc = \"    \\\"meta\\\": {\"]\n\
+#[doc = \"      \\\"$ref\\\": \\\"#/definitions/helper.Meta\\\"\"]\n\
+#[doc = \"    }\"]\n\
+#[doc = \"  }\"]\n\
+#[doc = \"}\"]\n\
+#[doc = r\" ```\"]\n\
+#[doc = r\" </details>\"]\n\
+#[derive(Clone, Debug, Deserialize, Serialize)]\n\
+pub struct ModifiedHelperPaginatedResponse<T> {\n\
+    pub data: T,\n\
+    pub links: HelperLinks,\n\
+    pub meta: HelperMeta,\n\
+}\n\
+\n\
+impl<T: Clone> From<&ModifiedHelperPaginatedResponse<T>> for ModifiedHelperPaginatedResponse<T> {\n\
+    fn from(value: &ModifiedHelperPaginatedResponse<T>) -> Self {\n\
+        value.clone()\n\
+    }\n\
+}";
 
     let folder_name = "src/types";
     fs::create_dir_all(folder_name)?;
@@ -46,8 +82,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut file = fs::File::create(&file_path)?;
     file.write_all(header.as_bytes())?;
     file.write_all(rust_defs.as_bytes())?;
+    file.write_all(footer.as_bytes())?;
 
-    // Format the generated file using rustfmt
     Command::new("rustfmt")
         .arg(file_path)
         .status()
