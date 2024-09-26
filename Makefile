@@ -15,4 +15,17 @@ chmod:
 clean:
 	rm -rf src/models/mod.rs
 
-.PHONY: generate example chmod clean
+
+prepare:
+	cargo install cargo-nextest
+
+
+test:
+	cargo nextest run
+
+
+doc:
+	cargo test --doc
+
+
+.PHONY: generate example chmod clean prepare test doc
