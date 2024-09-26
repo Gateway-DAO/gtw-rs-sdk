@@ -63,7 +63,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     file.write_all(mod_file_content.as_bytes())?;
 
-    println!("File created and written to successfully.");
+    println!("File created, written, and formatted successfully.");
 
     Ok(())
 }

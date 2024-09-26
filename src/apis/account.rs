@@ -8,8 +8,8 @@ use serde_json::json;
 impl GtwSDK {
     pub async fn create_account(
         &self,
-        account_details: models::ModelAccountCreateRequest,
-    ) -> Result<models::ModelMyAccountResponse, GTWError> {
+        account_details: ModelAccountCreateRequest,
+    ) -> Result<ModelMyAccountResponse, GTWError> {
         let url = format!("{}/accounts", BASE_URL);
 
         let body = json!({
@@ -30,7 +30,7 @@ impl GtwSDK {
         handle_response(response).await
     }
 
-    pub async fn account_info(&self) -> Result<models::ModelMyAccountResponse, GTWError> {
+    pub async fn account_info(&self) -> Result<ModelMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me", BASE_URL);
 
         let response = self
@@ -47,7 +47,7 @@ impl GtwSDK {
         &self,
         profile_picture: &str,
         username: &str,
-    ) -> Result<models::ModelMyAccountResponse, GTWError> {
+    ) -> Result<ModelMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me", BASE_URL);
 
         let body = json!({

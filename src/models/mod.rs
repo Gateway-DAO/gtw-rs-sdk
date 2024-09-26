@@ -913,6 +913,7 @@ impl From<&ModelUpdateDataAssetRequest> for ModelUpdateDataAssetRequest {
 #[doc = "  \"required\": ["]
 #[doc = "    \"account_id\","]
 #[doc = "    \"address\","]
+#[doc = "    \"chain\","]
 #[doc = "    \"created_at\","]
 #[doc = "    \"id\""]
 #[doc = "  ],"]
@@ -921,6 +922,9 @@ impl From<&ModelUpdateDataAssetRequest> for ModelUpdateDataAssetRequest {
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"address\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"chain\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"created_at\": {"]
@@ -940,6 +944,7 @@ impl From<&ModelUpdateDataAssetRequest> for ModelUpdateDataAssetRequest {
 pub struct ModelWalletAddress {
     pub account_id: i64,
     pub address: String,
+    pub chain: String,
     pub created_at: String,
     pub id: i64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -947,6 +952,33 @@ pub struct ModelWalletAddress {
 }
 impl From<&ModelWalletAddress> for ModelWalletAddress {
     fn from(value: &ModelWalletAddress) -> Self {
+        value.clone()
+    }
+}
+#[doc = "ModelWalletCreateRequest"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"address\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"address\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ModelWalletCreateRequest {
+    pub address: String,
+}
+impl From<&ModelWalletCreateRequest> for ModelWalletCreateRequest {
+    fn from(value: &ModelWalletCreateRequest) -> Self {
         value.clone()
     }
 }
