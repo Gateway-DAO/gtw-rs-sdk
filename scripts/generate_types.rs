@@ -6,6 +6,7 @@
 //! serde_json = "1.0"
 //! reqwest = { version = "0.11", features = ["blocking"] }
 //! dotenv = "0.15"
+//! rustfmt-wrapper = "0.2.1"
 //! ```
 
 use dotenv::dotenv;
@@ -34,7 +35,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let rust_defs = type_space.to_stream().to_string();
 
-    let header = "use serde::{Deserialize, Serialize};\n\n";
+    let header = "// Code generated using `make generate`.\n// Don't change it\n\nuse serde::{Deserialize, Serialize};\n\n";
+
+    let content = rustfmt_wrapper::rustfmt(format!("{}{}", header, rust_defs))?;
 
     let folder_name = "src/models";
     fs::create_dir_all(folder_name)?;
@@ -43,8 +46,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let file_path = Path::new(folder_name).join(file_name);
 
     let mut file = fs::File::create(file_path)?;
-    file.write_all(header.as_bytes())?;
-    file.write_all(rust_defs.as_bytes())?;
+    file.write_all(content.as_bytes())?;
+
+    // Get all filenames in the folder except mod.rs
+    let files = fs::read_dir(folder_name)?
+        .map(|res| res.map(|e| e.file_name()))
+        .collect::<Result<Vec<_>, std::io::Error>>()?;
+
+    // Add all public modules to the mod.rs file
+    let mut mod_file_content = String::new();
+    for file in files {
+        let file_name = file.to_str().unwrap();
+        if file_name != "mod.rs" {
+            mod_file_content.push_str(&format!("pub mod {};\n", file_name.replace(".rs", "")));
+        }
+    }
+    file.write_all(mod_file_content.as_bytes())?;
 
     println!("File created and written to successfully.");
 

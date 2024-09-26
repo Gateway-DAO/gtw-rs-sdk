@@ -1,3 +1,6 @@
+// Code generated using `make generate`.
+// Don't change it
+
 use serde::{Deserialize, Serialize};
 
 #[doc = r" Error types."]
@@ -135,17 +138,13 @@ impl From<&HelperMeta> for HelperMeta {
 #[doc = r" ```"]
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct HelperPaginatedResponse<T> {
-    pub data: T, // Generic type T for the data field
+pub struct HelperPaginatedResponse {
+    pub data: serde_json::Value,
     pub links: HelperLinks,
     pub meta: HelperMeta,
 }
-
-impl<T> From<&HelperPaginatedResponse<T>> for HelperPaginatedResponse<T>
-where
-    T: Clone, // Ensure T implements Clone to support the From trait
-{
-    fn from(value: &HelperPaginatedResponse<T>) -> Self {
+impl From<&HelperPaginatedResponse> for HelperPaginatedResponse {
+    fn from(value: &HelperPaginatedResponse) -> Self {
         value.clone()
     }
 }
@@ -463,6 +462,15 @@ impl From<&ModelDataAssetIdRequestAndResponse> for ModelDataAssetIdRequestAndRes
 #[doc = r" ```json"]
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"created_at\","]
+#[doc = "    \"created_by\","]
+#[doc = "    \"description\","]
+#[doc = "    \"id\","]
+#[doc = "    \"schema\","]
+#[doc = "    \"title\","]
+#[doc = "    \"updated_at\""]
+#[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"created_at\": {"]
 #[doc = "      \"type\": \"string\""]
@@ -500,24 +508,17 @@ impl From<&ModelDataAssetIdRequestAndResponse> for ModelDataAssetIdRequestAndRes
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ModelDataModel {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub created_by: Option<String>,
+    pub created_at: String,
+    pub created_by: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deleted_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub id: Option<i64>,
-    #[serde(default, skip_serializing_if = "serde_json::Map::is_empty")]
+    pub description: String,
+    pub id: i64,
     pub schema: serde_json::Map<String, serde_json::Value>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub tags: Vec<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub title: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<String>,
+    pub title: String,
+    pub updated_at: String,
 }
 impl From<&ModelDataModel> for ModelDataModel {
     fn from(value: &ModelDataModel) -> Self {
@@ -603,6 +604,15 @@ impl From<&ModelMessageResponse> for ModelMessageResponse {
 #[doc = r" ```json"]
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"created_at\","]
+#[doc = "    \"did\","]
+#[doc = "    \"storage_size\","]
+#[doc = "    \"updated_at\","]
+#[doc = "    \"username\","]
+#[doc = "    \"username_updated_at\","]
+#[doc = "    \"wallet_addresses\""]
+#[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"created_at\": {"]
 #[doc = "      \"type\": \"string\""]
@@ -613,6 +623,9 @@ impl From<&ModelMessageResponse> for ModelMessageResponse {
 #[doc = "    \"profile_picture\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
+#[doc = "    \"storage_size\": {"]
+#[doc = "      \"type\": \"integer\""]
+#[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
@@ -622,8 +635,11 @@ impl From<&ModelMessageResponse> for ModelMessageResponse {
 #[doc = "    \"username_updated_at\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
-#[doc = "    \"wallet_address\": {"]
-#[doc = "      \"type\": \"string\""]
+#[doc = "    \"wallet_addresses\": {"]
+#[doc = "      \"type\": \"array\","]
+#[doc = "      \"items\": {"]
+#[doc = "        \"$ref\": \"#/definitions/model.WalletAddress\""]
+#[doc = "      }"]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -631,20 +647,15 @@ impl From<&ModelMessageResponse> for ModelMessageResponse {
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ModelMyAccountResponse {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub did: Option<String>,
+    pub created_at: String,
+    pub did: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub profile_picture: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub username: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub username_updated_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub wallet_address: Option<String>,
+    pub storage_size: i64,
+    pub updated_at: String,
+    pub username: String,
+    pub username_updated_at: String,
+    pub wallet_addresses: Vec<ModelWalletAddress>,
 }
 impl From<&ModelMyAccountResponse> for ModelMyAccountResponse {
     fn from(value: &ModelMyAccountResponse) -> Self {
@@ -658,6 +669,12 @@ impl From<&ModelMyAccountResponse> for ModelMyAccountResponse {
 #[doc = r" ```json"]
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"address\","]
+#[doc = "    \"data_asset_id\","]
+#[doc = "    \"roles\","]
+#[doc = "    \"solana_address\""]
+#[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"address\": {"]
 #[doc = "      \"type\": \"string\""]
@@ -686,16 +703,12 @@ impl From<&ModelMyAccountResponse> for ModelMyAccountResponse {
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ModelPublicAcl {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub address: Option<String>,
+    pub address: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub data_asset_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub data_asset_id: i64,
     pub roles: Vec<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub solana_address: Option<String>,
+    pub solana_address: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
 }
@@ -712,6 +725,7 @@ impl From<&ModelPublicAcl> for ModelPublicAcl {
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
+#[doc = "    \"acl\","]
 #[doc = "    \"created_by\","]
 #[doc = "    \"fid\","]
 #[doc = "    \"id\","]
@@ -773,7 +787,6 @@ impl From<&ModelPublicAcl> for ModelPublicAcl {
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ModelPublicDataAsset {
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub acl: Vec<ModelPublicAcl>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
@@ -805,6 +818,9 @@ impl From<&ModelPublicDataAsset> for ModelPublicDataAsset {
 #[doc = r" ```json"]
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"addresses\""]
+#[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"addresses\": {"]
 #[doc = "      \"type\": \"array\","]
@@ -818,7 +834,6 @@ impl From<&ModelPublicDataAsset> for ModelPublicDataAsset {
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ModelShareDataAssetRequest {
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub addresses: Vec<String>,
 }
 impl From<&ModelShareDataAssetRequest> for ModelShareDataAssetRequest {
@@ -888,6 +903,53 @@ impl From<&ModelUpdateDataAssetRequest> for ModelUpdateDataAssetRequest {
         value.clone()
     }
 }
+#[doc = "ModelWalletAddress"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"account_id\","]
+#[doc = "    \"address\","]
+#[doc = "    \"created_at\","]
+#[doc = "    \"id\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"account_id\": {"]
+#[doc = "      \"type\": \"integer\""]
+#[doc = "    },"]
+#[doc = "    \"address\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"created_at\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"id\": {"]
+#[doc = "      \"type\": \"integer\""]
+#[doc = "    },"]
+#[doc = "    \"updated_at\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ModelWalletAddress {
+    pub account_id: i64,
+    pub address: String,
+    pub created_at: String,
+    pub id: i64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
+}
+impl From<&ModelWalletAddress> for ModelWalletAddress {
+    fn from(value: &ModelWalletAddress) -> Self {
+        value.clone()
+    }
+}
 #[doc = "ResponsesMessageResponse"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -895,6 +957,9 @@ impl From<&ModelUpdateDataAssetRequest> for ModelUpdateDataAssetRequest {
 #[doc = r" ```json"]
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"message\""]
+#[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"message\": {"]
 #[doc = "      \"type\": \"string\""]
@@ -905,11 +970,11 @@ impl From<&ModelUpdateDataAssetRequest> for ModelUpdateDataAssetRequest {
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ResponsesMessageResponse {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
+    pub message: String,
 }
 impl From<&ResponsesMessageResponse> for ResponsesMessageResponse {
     fn from(value: &ResponsesMessageResponse) -> Self {
         value.clone()
     }
 }
+pub mod helper_generic_paginated_response;
