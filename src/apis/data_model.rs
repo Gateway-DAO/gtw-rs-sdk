@@ -1,12 +1,17 @@
-use super::{models::*, GtwApi, BASE_URL};
-use crate::utils::{error::GTWError, handle_response::handle_response};
+use helper_generic_paginated_response::HelperGenericPaginatedResponse;
 
-impl GtwApi {
+use crate::{
+    models::*,
+    utils::{error::*, handle_response::handle_response},
+    GtwSDK, BASE_URL,
+};
+
+impl GtwSDK {
     pub async fn get_data_models(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
+    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
         let url = format!("{}/data-models", BASE_URL);
 
         let mut query_params = vec![];
@@ -32,7 +37,7 @@ impl GtwApi {
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
+    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
         let url = format!("{}/data-models/me", BASE_URL);
 
         let mut query_params = vec![];

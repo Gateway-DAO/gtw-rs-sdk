@@ -1,8 +1,11 @@
-use super::{models, GtwApi, BASE_URL};
-use crate::utils::{error::GTWError, handle_response::handle_response};
+use crate::{
+    models::{self},
+    utils::{error::*, handle_response::handle_response},
+    GtwSDK, BASE_URL,
+};
 use serde_json::json;
 
-impl GtwApi {
+impl GtwSDK {
     pub async fn login(
         &self,
         login_credetials: models::ModelAuthRequest,
