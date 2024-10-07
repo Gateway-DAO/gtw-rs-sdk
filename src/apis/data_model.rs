@@ -20,23 +20,23 @@ impl DataModelOperationsClient {
 
 #[async_trait]
 pub trait DataModelOperation {
-    async fn get_data_models(
+    async fn get_all(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
     ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError>;
-    async fn get_user_data_models(
+    async fn get_my(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
     ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError>;
 
-    async fn get_data_model_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError>;
+    async fn get_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError>;
 }
 
 #[async_trait]
 impl DataModelOperation for DataModelOperationsClient {
-    async fn get_data_models(
+    async fn get_all(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
@@ -62,7 +62,7 @@ impl DataModelOperation for DataModelOperationsClient {
         handle_response(response).await
     }
 
-    async fn get_user_data_models(
+    async fn get_my(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
@@ -88,7 +88,7 @@ impl DataModelOperation for DataModelOperationsClient {
         handle_response(response).await
     }
 
-    async fn get_data_model_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError> {
+    async fn get_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError> {
         let url = format!("{}/data-models/{}", BASE_URL, id);
 
         let response = self
