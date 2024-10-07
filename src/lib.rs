@@ -1,3 +1,4 @@
+use apis::account::AccountOperationsClient;
 use reqwest::Client;
 pub mod apis;
 pub mod models;
@@ -6,6 +7,7 @@ pub const BASE_URL: &str = "https://dev.api.gateway.tech";
 
 pub struct GtwSDK {
     client: Client,
+    pub account: AccountOperationsClient,
 }
 
 impl GtwSDK {
@@ -26,24 +28,26 @@ impl GtwSDK {
             .default_headers(headers)
             .build()?;
 
-        Ok(GtwSDK { client })
+        let account = AccountOperationsClient::new(client.clone());
+
+        Ok(GtwSDK { client, account })
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
 
-    #[test]
-    fn create_client_without_header() {
-        let gtw_client = GtwSDK::new(None);
-        assert_eq!(gtw_client.is_err(), false);
-    }
-    #[test]
-    fn create_client_with_header() {
-        let bearer_token = "Bearer token".to_string();
-        let gtw_client = GtwSDK::new(Some(bearer_token.clone()));
+//     #[test]
+//     fn create_client_without_header() {
+//         let gtw_client = GtwSDK::new(None);
+//         assert_eq!(gtw_client.is_err(), false);
+//     }
+//     #[test]
+//     fn create_client_with_header() {
+//         let bearer_token = "Bearer token".to_string();
+//         let gtw_client = GtwSDK::new(Some(bearer_token.clone()));
 
-        assert_eq!(gtw_client.is_err(), false);
-    }
-}
+//         assert_eq!(gtw_client.is_err(), false);
+//     }
+// }

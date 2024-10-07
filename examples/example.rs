@@ -1,5 +1,5 @@
 use dotenv::dotenv;
-use gtw_rs_sdk::GtwSDK;
+use gtw_rs_sdk::{apis::account::AccountOperations, GtwSDK};
 use std::env;
 use tokio;
 

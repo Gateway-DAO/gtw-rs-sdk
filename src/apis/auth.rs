@@ -3,7 +3,14 @@ use crate::{
     utils::{error::*, handle_response::handle_response},
     GtwSDK, BASE_URL,
 };
+use reqwest::Client;
 use serde_json::json;
+
+pub trait AuthOperationS {}
+
+pub struct AccountOperationsClient {
+    client: Client,
+}
 
 impl GtwSDK {
     pub async fn login(
