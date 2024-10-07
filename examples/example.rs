@@ -10,7 +10,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let bearer_token = env::var("BEARER_TOKEN").expect("SCHEMA_URL is not set"); //put your token over here
     let gtw_sdk = GtwSDK::new(Some(bearer_token))?;
 
-    match gtw_sdk.account_info().await {
+    match gtw_sdk.account.account_info().await {
         Ok(account_info) => {
             println!("Account Info: {:?}", account_info.did);
         }
@@ -19,7 +19,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    match gtw_sdk.update_account_info("hello", "r11manish").await {
+    match gtw_sdk
+        .account
+        .update_account_info("hello", "r11manish")
+        .await
+    {
         Ok(update_account_info) => {
             println!(" Update Account Info: {:?}", update_account_info.username);
         }

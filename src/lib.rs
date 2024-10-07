@@ -1,4 +1,4 @@
-use apis::account::AccountOperationsClient;
+use apis::{account::AccountOperationsClient, auth::AuthOperationsClient};
 use reqwest::Client;
 pub mod apis;
 pub mod models;
@@ -8,6 +8,7 @@ pub const BASE_URL: &str = "https://dev.api.gateway.tech";
 pub struct GtwSDK {
     client: Client,
     pub account: AccountOperationsClient,
+    pub auth: AuthOperationsClient,
 }
 
 impl GtwSDK {
@@ -29,8 +30,13 @@ impl GtwSDK {
             .build()?;
 
         let account = AccountOperationsClient::new(client.clone());
+        let auth = AuthOperationsClient::new(client.clone());
 
-        Ok(GtwSDK { client, account })
+        Ok(GtwSDK {
+            client,
+            account,
+            auth,
+        })
     }
 }
 

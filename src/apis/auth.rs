@@ -1,19 +1,39 @@
 use crate::{
     models::*,
     utils::{error::*, handle_response::handle_response},
-    GtwSDK, BASE_URL,
+    BASE_URL,
 };
 use reqwest::Client;
 use serde_json::json;
 
-pub trait AuthOperationS {}
+use async_trait::async_trait;
 
-pub struct AccountOperationsClient {
+#[async_trait]
+
+pub trait AuthOperations {
+    async fn login(
+        &self,
+        login_credetials: ModelAuthRequest,
+    ) -> Result<ModelTokenResponse, GTWError>;
+
+    async fn generate_message(&self) -> Result<ModelMessageResponse, GTWError>;
+    async fn generate_refresh_token(&self) -> Result<ModelTokenResponse, GTWError>;
+}
+
+pub struct AuthOperationsClient {
     client: Client,
 }
 
-impl GtwSDK {
-    pub async fn login(
+impl AuthOperationsClient {
+    pub fn new(client: Client) -> Self {
+        Self { client }
+    }
+}
+
+#[async_trait]
+
+impl AuthOperations for AuthOperationsClient {
+    async fn login(
         &self,
         login_credetials: ModelAuthRequest,
     ) -> Result<ModelTokenResponse, GTWError> {
@@ -36,7 +56,7 @@ impl GtwSDK {
         handle_response(response).await
     }
 
-    pub async fn generate_message(&self) -> Result<ModelMessageResponse, GTWError> {
+    async fn generate_message(&self) -> Result<ModelMessageResponse, GTWError> {
         let url = format!("{}/auth/message", BASE_URL);
 
         let response = self
@@ -49,7 +69,7 @@ impl GtwSDK {
         handle_response(response).await
     }
 
-    pub async fn generate_refresh_token(&self) -> Result<ModelTokenResponse, GTWError> {
+    async fn generate_refresh_token(&self) -> Result<ModelTokenResponse, GTWError> {
         let url = format!("{}/auth/refresh-token", BASE_URL);
         let response = self
             .client
