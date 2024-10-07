@@ -570,6 +570,36 @@ impl From<&ModelDataModelRequest> for ModelDataModelRequest {
         value.clone()
     }
 }
+#[doc = "ModelDeleteAclRequest"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"addresses\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"addresses\": {"]
+#[doc = "      \"type\": \"array\","]
+#[doc = "      \"items\": {"]
+#[doc = "        \"type\": \"string\""]
+#[doc = "      }"]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ModelDeleteAclRequest {
+    pub addresses: Vec<String>,
+}
+impl From<&ModelDeleteAclRequest> for ModelDeleteAclRequest {
+    fn from(value: &ModelDeleteAclRequest) -> Self {
+        value.clone()
+    }
+}
 #[doc = "ModelMessageResponse"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -685,6 +715,9 @@ impl From<&ModelMyAccountResponse> for ModelMyAccountResponse {
 #[doc = "    \"data_asset_id\": {"]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
+#[doc = "    \"is_authority\": {"]
+#[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
 #[doc = "    \"roles\": {"]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
@@ -707,6 +740,8 @@ pub struct ModelPublicAcl {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
     pub data_asset_id: i64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_authority: Option<bool>,
     pub roles: Vec<String>,
     pub solana_address: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]

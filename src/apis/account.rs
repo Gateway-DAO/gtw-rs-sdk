@@ -7,6 +7,8 @@ use async_trait::async_trait;
 use reqwest::Client;
 use serde_json::json;
 
+use super::wallet::WalletOperationsClient;
+
 #[async_trait]
 pub trait AccountOperations {
     async fn create(
@@ -25,11 +27,13 @@ pub trait AccountOperations {
 
 pub struct AccountOperationsClient {
     client: Client,
+    pub wallet: WalletOperationsClient,
 }
 
 impl AccountOperationsClient {
     pub fn new(client: Client) -> Self {
-        Self { client }
+        let wallet = WalletOperationsClient::new(client.clone());
+        Self { client, wallet }
     }
 }
 
