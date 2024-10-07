@@ -1,13 +1,42 @@
+use async_trait::async_trait;
 use helper_generic_paginated_response::HelperGenericPaginatedResponse;
+use reqwest::Client;
 
 use crate::{
     models::*,
     utils::{error::*, handle_response::handle_response},
-    GtwSDK, BASE_URL,
+    BASE_URL,
 };
 
-impl GtwSDK {
-    pub async fn get_data_models(
+pub struct DataModelOperationsClient {
+    client: Client,
+}
+
+impl DataModelOperationsClient {
+    pub fn new(client: Client) -> Self {
+        Self { client }
+    }
+}
+
+#[async_trait]
+pub trait DataModelOperation {
+    async fn get_data_models(
+        &self,
+        page: Option<u64>,
+        page_size: Option<u64>,
+    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError>;
+    async fn get_user_data_models(
+        &self,
+        page: Option<u64>,
+        page_size: Option<u64>,
+    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError>;
+
+    async fn get_data_model_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError>;
+}
+
+#[async_trait]
+impl DataModelOperation for DataModelOperationsClient {
+    async fn get_data_models(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
@@ -33,7 +62,7 @@ impl GtwSDK {
         handle_response(response).await
     }
 
-    pub async fn get_user_data_models(
+    async fn get_user_data_models(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
@@ -59,7 +88,7 @@ impl GtwSDK {
         handle_response(response).await
     }
 
-    pub async fn get_data_model_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError> {
+    async fn get_data_model_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError> {
         let url = format!("{}/data-models/{}", BASE_URL, id);
 
         let response = self

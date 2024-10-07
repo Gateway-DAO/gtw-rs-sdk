@@ -1,4 +1,8 @@
-use apis::{account::AccountOperationsClient, auth::AuthOperationsClient};
+use apis::{
+    account::AccountOperationsClient,
+    auth::AuthOperationsClient,
+    data_model::{self, DataModelOperationsClient},
+};
 use reqwest::Client;
 pub mod apis;
 pub mod models;
@@ -9,6 +13,7 @@ pub struct GtwSDK {
     client: Client,
     pub account: AccountOperationsClient,
     pub auth: AuthOperationsClient,
+    pub data_model: DataModelOperationsClient,
 }
 
 impl GtwSDK {
@@ -31,11 +36,13 @@ impl GtwSDK {
 
         let account = AccountOperationsClient::new(client.clone());
         let auth = AuthOperationsClient::new(client.clone());
+        let data_model = DataModelOperationsClient::new(client.clone());
 
         Ok(GtwSDK {
             client,
             account,
             auth,
+            data_model,
         })
     }
 }
