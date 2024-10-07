@@ -16,8 +16,8 @@ pub trait AuthOperations {
         login_credetials: ModelAuthRequest,
     ) -> Result<ModelTokenResponse, GTWError>;
 
-    async fn generate_message(&self) -> Result<ModelMessageResponse, GTWError>;
-    async fn generate_refresh_token(&self) -> Result<ModelTokenResponse, GTWError>;
+    async fn get_message(&self) -> Result<ModelMessageResponse, GTWError>;
+    async fn get_refresh_token(&self) -> Result<ModelTokenResponse, GTWError>;
 }
 
 pub struct AuthOperationsClient {
@@ -56,7 +56,7 @@ impl AuthOperations for AuthOperationsClient {
         handle_response(response).await
     }
 
-    async fn generate_message(&self) -> Result<ModelMessageResponse, GTWError> {
+    async fn get_message(&self) -> Result<ModelMessageResponse, GTWError> {
         let url = format!("{}/auth/message", BASE_URL);
 
         let response = self
@@ -69,7 +69,7 @@ impl AuthOperations for AuthOperationsClient {
         handle_response(response).await
     }
 
-    async fn generate_refresh_token(&self) -> Result<ModelTokenResponse, GTWError> {
+    async fn get_refresh_token(&self) -> Result<ModelTokenResponse, GTWError> {
         let url = format!("{}/auth/refresh-token", BASE_URL);
         let response = self
             .client
