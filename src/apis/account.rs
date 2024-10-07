@@ -1,7 +1,7 @@
 use crate::{
     models::*,
     utils::{error::*, handle_response::handle_response},
-    GtwSDK, BASE_URL,
+    BASE_URL,
 };
 use async_trait::async_trait;
 use reqwest::Client;
@@ -9,14 +9,14 @@ use serde_json::json;
 
 #[async_trait]
 pub trait AccountOperations {
-    async fn create_account(
+    async fn create(
         &self,
         account_details: ModelAccountCreateRequest,
     ) -> Result<ModelMyAccountResponse, GTWError>;
 
-    async fn account_info(&self) -> Result<ModelMyAccountResponse, GTWError>;
+    async fn get_me(&self) -> Result<ModelMyAccountResponse, GTWError>;
 
-    async fn update_account_info(
+    async fn update_me(
         &self,
         profile_picture: &str,
         username: &str,
@@ -35,7 +35,7 @@ impl AccountOperationsClient {
 
 #[async_trait]
 impl AccountOperations for AccountOperationsClient {
-    async fn create_account(
+    async fn create(
         &self,
         account_details: ModelAccountCreateRequest,
     ) -> Result<ModelMyAccountResponse, GTWError> {
@@ -59,7 +59,7 @@ impl AccountOperations for AccountOperationsClient {
         handle_response(response).await
     }
 
-    async fn account_info(&self) -> Result<ModelMyAccountResponse, GTWError> {
+    async fn get_me(&self) -> Result<ModelMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me", BASE_URL);
 
         let response = self
@@ -72,7 +72,7 @@ impl AccountOperations for AccountOperationsClient {
         handle_response(response).await
     }
 
-    async fn update_account_info(
+    async fn update_me(
         &self,
         profile_picture: &str,
         username: &str,
