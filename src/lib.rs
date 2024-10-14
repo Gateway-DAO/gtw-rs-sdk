@@ -1,19 +1,20 @@
 use apis::{
-    account::AccountOperationsClient,
-    auth::AuthOperationsClient,
-    data_model::{self, DataModelOperationsClient},
+    account::{AccountOperations, AccountOperationsClient},
+    auth::{AuthOperations, AuthOperationsClient},
+    data_model::{DataModelOperation, DataModelOperationsClient},
 };
 use reqwest::Client;
 pub mod apis;
 pub mod models;
 mod utils;
+
 pub const BASE_URL: &str = "https://dev.api.gateway.tech";
 
 pub struct GtwSDK {
     client: Client,
-    pub account: AccountOperationsClient,
-    pub auth: AuthOperationsClient,
-    pub data_model: DataModelOperationsClient,
+    pub account: Box<dyn AccountOperations>,
+    pub auth: Box<dyn AuthOperations>,
+    pub data_model: Box<dyn DataModelOperation>,
 }
 
 impl GtwSDK {
@@ -22,21 +23,25 @@ impl GtwSDK {
         if let Some(bearer_token) = bearer_token {
             headers.insert(
                 reqwest::header::AUTHORIZATION,
-                format!("Bearer {}", bearer_token).parse().unwrap(),
+                format!("Bearer {}", bearer_token)
+                    .parse()
+                    .expect("Failed to parse authorization header"),
             );
         }
         headers.insert(
             reqwest::header::CONTENT_TYPE,
-            "application/json".parse().unwrap(),
+            "application/json"
+                .parse()
+                .expect("Failed to parse content type header"),
         );
 
         let client = reqwest::Client::builder()
             .default_headers(headers)
             .build()?;
 
-        let account = AccountOperationsClient::new(client.clone());
-        let auth = AuthOperationsClient::new(client.clone());
-        let data_model = DataModelOperationsClient::new(client.clone());
+        let account = Box::new(AccountOperationsClient::new(client.clone())); // Box the clients
+        let auth = Box::new(AuthOperationsClient::new(client.clone())); // Box the clients
+        let data_model = Box::new(DataModelOperationsClient::new(client.clone())); // Box the clients
 
         Ok(GtwSDK {
             client,
