@@ -1,7 +1,7 @@
 use apis::{
     account::{AccountOperations, AccountOperationsClient},
     auth::{AuthOperations, AuthOperationsClient},
-    data_asset::{DataAssestOperation, DataAssestOperationsClient},
+    data_asset::{DataAssetOperation, DataAssetOperationsClient},
     data_model::{DataModelOperation, DataModelOperationsClient},
 };
 use reqwest::Client;
@@ -17,7 +17,7 @@ pub struct GtwSDK {
     pub account: Box<dyn AccountOperations>,
     pub auth: Box<dyn AuthOperations>,
     pub data_model: Box<dyn DataModelOperation>,
-    pub data_assest: Box<dyn DataAssestOperation>,
+    pub data_assest: Box<dyn DataAssetOperation>,
 }
 
 impl GtwSDK {
@@ -46,7 +46,7 @@ impl GtwSDK {
         let auth = Box::new(AuthOperationsClient::new(client.clone())); // Box the clients
         let data_model = Box::new(DataModelOperationsClient::new(client.clone())); // Box the clients
 
-        let data_assest = Box::new(DataAssestOperationsClient::new(client.clone()));
+        let data_assest = Box::new(DataAssetOperationsClient::new(client.clone()));
 
         Ok(GtwSDK {
             client,
