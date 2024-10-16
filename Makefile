@@ -4,8 +4,11 @@ generate:
 	rust-script $(SCRIPT_PATH)
 
 
-example:
-	cargo run --example  example
+wallet_example:
+		cargo run --example  wallet
+
+account_example:
+		cargo run --example account
 
 
 chmod:

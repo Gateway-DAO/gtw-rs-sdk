@@ -1,6 +1,7 @@
 use apis::{
     account::{AccountOperations, AccountOperationsClient},
     auth::{AuthOperations, AuthOperationsClient},
+    data_assest::{DataAssestOperation, DataAssestOperationsClient},
     data_model::{DataModelOperation, DataModelOperationsClient},
 };
 use reqwest::Client;
@@ -11,10 +12,12 @@ mod utils;
 pub const BASE_URL: &str = "https://dev.api.gateway.tech";
 
 pub struct GtwSDK {
+    #[allow(dead_code)]
     client: Client,
     pub account: Box<dyn AccountOperations>,
     pub auth: Box<dyn AuthOperations>,
     pub data_model: Box<dyn DataModelOperation>,
+    pub data_assest: Box<dyn DataAssestOperation>,
 }
 
 impl GtwSDK {
@@ -43,11 +46,14 @@ impl GtwSDK {
         let auth = Box::new(AuthOperationsClient::new(client.clone())); // Box the clients
         let data_model = Box::new(DataModelOperationsClient::new(client.clone())); // Box the clients
 
+        let data_assest = Box::new(DataAssestOperationsClient::new(client.clone()));
+
         Ok(GtwSDK {
             client,
             account,
             auth,
             data_model,
+            data_assest,
         })
     }
 }

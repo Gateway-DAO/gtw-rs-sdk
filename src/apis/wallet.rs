@@ -10,7 +10,7 @@ use async_trait::async_trait;
 
 #[async_trait]
 pub trait WalletOperations {
-    async fn add(&self, address: &str) -> Result<ModelWalletCreateRequest, GTWError>;
+    async fn add(&self, address: &str) -> Result<ModelMyAccountResponse, GTWError>;
     async fn remove(&self, address: &str) -> Result<ModelMyAccountResponse, GTWError>;
 }
 
@@ -26,16 +26,17 @@ impl WalletOperationsClient {
 
 #[async_trait]
 impl WalletOperations for WalletOperationsClient {
-    async fn add(&self, address: &str) -> Result<ModelWalletCreateRequest, GTWError> {
+    async fn add(&self, address: &str) -> Result<ModelMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me/wallets", BASE_URL);
 
         let body = json!({
           "address" : address
         });
+
         let response = self
             .client
-            .patch(&url)
-            .body(body.to_string())
+            .post(&url)
+            .json(&body)
             .send()
             .await
             .map_err(GTWError::NetworkError)?;
@@ -44,7 +45,7 @@ impl WalletOperations for WalletOperationsClient {
     }
 
     async fn remove(&self, address: &str) -> Result<ModelMyAccountResponse, GTWError> {
-        let url = format!("{}/accounts/me/wallets{}", BASE_URL, address);
+        let url = format!("{}/accounts/me/wallets/{}", BASE_URL, address);
 
         let response = self
             .client

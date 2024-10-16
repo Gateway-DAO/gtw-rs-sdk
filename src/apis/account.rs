@@ -7,7 +7,7 @@ use async_trait::async_trait;
 use reqwest::Client;
 use serde_json::json;
 
-use super::wallet::WalletOperationsClient;
+use super::wallet::{WalletOperations, WalletOperationsClient};
 
 #[async_trait]
 pub trait AccountOperations {
@@ -23,6 +23,8 @@ pub trait AccountOperations {
         profile_picture: &str,
         username: &str,
     ) -> Result<ModelMyAccountResponse, GTWError>;
+
+    fn wallet(&self) -> &dyn WalletOperations;
 }
 
 pub struct AccountOperationsClient {
@@ -97,5 +99,9 @@ impl AccountOperations for AccountOperationsClient {
             .map_err(GTWError::NetworkError)?;
 
         handle_response(response).await
+    }
+
+    fn wallet(&self) -> &dyn WalletOperations {
+        &self.wallet
     }
 }
