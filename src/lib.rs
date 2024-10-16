@@ -1,7 +1,7 @@
 use apis::{
     account::{AccountOperations, AccountOperationsClient},
     auth::{AuthOperations, AuthOperationsClient},
-    data_assest::{DataAssestOperation, DataAssestOperationsClient},
+    data_asset::{DataAssestOperation, DataAssestOperationsClient},
     data_model::{DataModelOperation, DataModelOperationsClient},
 };
 use reqwest::Client;

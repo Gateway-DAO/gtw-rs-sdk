@@ -35,18 +35,18 @@ pub trait DataModelOperation {
         page_size: Option<u64>,
     ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError>;
 
-    async fn get(&self, id: u64) -> Result<ModelDataModel, GTWError>;
+    async fn get(&self, id: u64) -> Result<DtoDataModelResponse, GTWError>;
 
     async fn create(
         &self,
-        data_model_input: ModelDataModelRequest,
-    ) -> Result<ModelDataModel, GTWError>;
+        data_model_input: DtoDataModelCreateRequest,
+    ) -> Result<DtoDataModelResponse, GTWError>;
 
     async fn update(
         &self,
         data_model_id: u64,
-        data_model_input: ModelDataModelRequest,
-    ) -> Result<ModelDataModel, GTWError>;
+        data_model_input: DtoDataModelUpdateRequest,
+    ) -> Result<DtoDataModelResponse, GTWError>;
 }
 
 #[async_trait]
@@ -79,8 +79,8 @@ impl DataModelOperation for DataModelOperationsClient {
 
     async fn create(
         &self,
-        data_model_input: ModelDataModelRequest,
-    ) -> Result<ModelDataModel, GTWError> {
+        data_model_input: DtoDataModelCreateRequest,
+    ) -> Result<DtoDataModelResponse, GTWError> {
         let url = format!("{}/data-models", BASE_URL);
 
         let response = self
@@ -97,8 +97,8 @@ impl DataModelOperation for DataModelOperationsClient {
     async fn update(
         &self,
         data_model_id: u64,
-        data_model_input: ModelDataModelRequest,
-    ) -> Result<ModelDataModel, GTWError> {
+        data_model_input: DtoDataModelUpdateRequest,
+    ) -> Result<DtoDataModelResponse, GTWError> {
         let url = format!("{}/data-models/{}", BASE_URL, data_model_id);
 
         let response = self
@@ -112,7 +112,7 @@ impl DataModelOperation for DataModelOperationsClient {
         handle_response(response).await
     }
 
-    async fn get(&self, id: u64) -> Result<ModelDataModel, GTWError> {
+    async fn get(&self, id: u64) -> Result<DtoDataModelResponse, GTWError> {
         let url = format!("{}/data-models/{}", BASE_URL, id);
 
         let response = self
@@ -129,7 +129,7 @@ impl DataModelOperation for DataModelOperationsClient {
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
+    ) -> Result<HelperGenericPaginatedResponse<Vec<DtoDataModelResponse>>, GTWError> {
         let url = format!("{}/data-models/me", BASE_URL);
 
         let mut query_params = vec![];
