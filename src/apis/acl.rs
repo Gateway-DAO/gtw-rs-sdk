@@ -11,20 +11,20 @@ pub trait AclOperations {
     async fn update(
         &self,
         id: u64,
-        acl_list: Vec<ModelAclRequest>,
-    ) -> Result<Vec<ModelPublicAcl>, GTWError>;
+        acl_list: Vec<DtoAclRequest>,
+    ) -> Result<Vec<DtoPublicAcl>, GTWError>;
 
     async fn add(
         &self,
         id: u64,
-        acl_list: Vec<ModelAclRequest>,
-    ) -> Result<Vec<ModelPublicAcl>, GTWError>;
+        acl_list: Vec<DtoAclRequest>,
+    ) -> Result<Vec<DtoPublicAcl>, GTWError>;
 
     async fn delete(
         &self,
         id: u64,
-        acl_list: ModelDeleteAclRequest,
-    ) -> Result<ModelMessageResponse, GTWError>;
+        acl_list: DtoDeleteAclRequest,
+    ) -> Result<DtoMessageResponse, GTWError>;
 }
 
 pub struct AclOperationsClient {
@@ -42,8 +42,8 @@ impl AclOperations for AclOperationsClient {
     async fn update(
         &self,
         id: u64,
-        acl_list: Vec<ModelAclRequest>,
-    ) -> Result<Vec<ModelPublicAcl>, GTWError> {
+        acl_list: Vec<DtoAclRequest>,
+    ) -> Result<Vec<DtoPublicAcl>, GTWError> {
         let url = format!("{}/data-assets/{}/acl", BASE_URL, id);
 
         let response = self
@@ -60,8 +60,8 @@ impl AclOperations for AclOperationsClient {
     async fn add(
         &self,
         id: u64,
-        acl_list: Vec<ModelAclRequest>,
-    ) -> Result<Vec<ModelPublicAcl>, GTWError> {
+        acl_list: Vec<DtoAclRequest>,
+    ) -> Result<Vec<DtoPublicAcl>, GTWError> {
         let url = format!("{}/data-assets/{}/acl", BASE_URL, id);
 
         let response = self
@@ -78,8 +78,8 @@ impl AclOperations for AclOperationsClient {
     async fn delete(
         &self,
         id: u64,
-        acl_list: ModelDeleteAclRequest,
-    ) -> Result<ModelMessageResponse, GTWError> {
+        acl_list: DtoDeleteAclRequest,
+    ) -> Result<DtoMessageResponse, GTWError> {
         let url = format!("{}/data-assets/{}/acl/delete", BASE_URL, id);
 
         let response = self
