@@ -16,61 +16,61 @@ pub struct FileDownload {
     pub file_name: String,
 }
 
-pub struct DataAssestOperationsClient {
+pub struct DataAssetOperationsClient {
     client: Client,
 }
 
-impl DataAssestOperationsClient {
+impl DataAssetOperationsClient {
     pub fn new(client: Client) -> Self {
         Self { client }
     }
 }
 
 #[async_trait]
-pub trait DataAssestOperation {
+pub trait DataAssetOperation {
     async fn upload(
         &self,
-        upload_body: ModelCreateDataAssetRequest,
-    ) -> Result<ModelDataAssetIdRequestAndResponse, GTWError>;
+        upload_body: DtoCreateDataAssetRequest,
+    ) -> Result<DtoDataAssetIdRequestAndResponse, GTWError>;
 
     async fn upload_file(
         &self,
         file_name: &str,
         file_buffer: Vec<u8>,
-        acl_list: Option<ModelAclRequest>,
+        acl_list: Option<DtoAclRequest>,
         expiration_date: Option<String>,
-    ) -> Result<ModelDataAssetIdRequestAndResponse, GTWError>;
+    ) -> Result<DtoDataAssetIdRequestAndResponse, GTWError>;
 
     async fn get_created_by_me(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelPublicDataAsset>>, GTWError>;
+    ) -> Result<HelperGenericPaginatedResponse<Vec<DtoPublicDataAsset>>, GTWError>;
 
     async fn get_received_by_me(
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelPublicDataAsset>>, GTWError>;
+    ) -> Result<HelperGenericPaginatedResponse<Vec<DtoPublicDataAsset>>, GTWError>;
 
-    async fn get(&self, id: u64) -> Result<ModelPublicDataAsset, GTWError>;
+    async fn get(&self, id: u64) -> Result<DtoPublicDataAsset, GTWError>;
 
     async fn update(
         &self,
         id: u64,
-        update_assest_body: ModelCreateDataAssetRequest,
-    ) -> Result<ModelPublicDataAsset, GTWError>;
+        update_asset_body: DtoCreateDataAssetRequest,
+    ) -> Result<DtoPublicDataAsset, GTWError>;
 
     async fn update_file(
         &self,
         id: u64,
         file_name: &str,
         file_buffer: Vec<u8>,
-        acl_list: Option<Vec<ModelAclRequest>>,
+        acl_list: Option<Vec<DtoAclRequest>>,
         expiration_date: Option<String>,
-    ) -> Result<ModelPublicDataAsset, GTWError>;
+    ) -> Result<DtoPublicDataAsset, GTWError>;
 
-    async fn delete(&self, id: u64) -> Result<ModelMessageResponse, GTWError>;
+    async fn delete(&self, id: u64) -> Result<DtoMessageResponse, GTWError>;
 
     async fn download(&self, id: u64) -> Result<FileDownload, GTWError>;
 
@@ -78,15 +78,15 @@ pub trait DataAssestOperation {
         &self,
         id: u64,
         wallet_address_list: Vec<String>,
-    ) -> Result<Vec<ModelPublicAcl>, GTWError>;
+    ) -> Result<Vec<DtoPublicAcl>, GTWError>;
 }
 
 #[async_trait]
-impl DataAssestOperation for DataAssestOperationsClient {
+impl DataAssetOperation for DataAssetOperationsClient {
     async fn upload(
         &self,
-        upload_body: ModelCreateDataAssetRequest,
-    ) -> Result<ModelDataAssetIdRequestAndResponse, GTWError> {
+        upload_body: DtoCreateDataAssetRequest,
+    ) -> Result<DtoDataAssetIdRequestAndResponse, GTWError> {
         let url = format!("{}/data-assets", BASE_URL);
 
         let response = self
@@ -104,9 +104,9 @@ impl DataAssestOperation for DataAssestOperationsClient {
         &self,
         file_name: &str,
         file_buffer: Vec<u8>,
-        acl_list: Option<ModelAclRequest>,
+        acl_list: Option<DtoAclRequest>,
         expiration_date: Option<String>,
-    ) -> Result<ModelDataAssetIdRequestAndResponse, GTWError> {
+    ) -> Result<DtoDataAssetIdRequestAndResponse, GTWError> {
         let extension =
             validate_file_name(file_name).map_err(|e| GTWError::UnexpectedError(e.to_string()))?;
 
@@ -137,7 +137,7 @@ impl DataAssestOperation for DataAssestOperationsClient {
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelPublicDataAsset>>, GTWError> {
+    ) -> Result<HelperGenericPaginatedResponse<Vec<DtoPublicDataAsset>>, GTWError> {
         let url = format!("{}/data-assets/created", BASE_URL);
 
         let mut query_params = vec![];
@@ -163,7 +163,7 @@ impl DataAssestOperation for DataAssestOperationsClient {
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelPublicDataAsset>>, GTWError> {
+    ) -> Result<HelperGenericPaginatedResponse<Vec<DtoPublicDataAsset>>, GTWError> {
         let url = format!("{}/data-assets/received", BASE_URL);
 
         let mut query_params = vec![];
@@ -185,7 +185,7 @@ impl DataAssestOperation for DataAssestOperationsClient {
         handle_response(response).await
     }
 
-    async fn get(&self, id: u64) -> Result<ModelPublicDataAsset, GTWError> {
+    async fn get(&self, id: u64) -> Result<DtoPublicDataAsset, GTWError> {
         let url = format!("{}/data-assets/{}", BASE_URL, id);
 
         let response = self
@@ -201,8 +201,8 @@ impl DataAssestOperation for DataAssestOperationsClient {
     async fn update(
         &self,
         id: u64,
-        update_asset_body: ModelCreateDataAssetRequest,
-    ) -> Result<ModelPublicDataAsset, GTWError> {
+        update_asset_body: DtoCreateDataAssetRequest,
+    ) -> Result<DtoPublicDataAsset, GTWError> {
         let url = format!("{}/data-assets/{}", BASE_URL, id);
 
         let response = self
@@ -221,9 +221,9 @@ impl DataAssestOperation for DataAssestOperationsClient {
         id: u64,
         file_name: &str,
         file_buffer: Vec<u8>,
-        acl_list: Option<Vec<ModelAclRequest>>,
+        acl_list: Option<Vec<DtoAclRequest>>,
         expiration_date: Option<String>,
-    ) -> Result<ModelPublicDataAsset, GTWError> {
+    ) -> Result<DtoPublicDataAsset, GTWError> {
         let extension =
             validate_file_name(file_name).map_err(|e| GTWError::UnexpectedError(e.to_string()))?;
 
@@ -254,7 +254,7 @@ impl DataAssestOperation for DataAssestOperationsClient {
         handle_response(response).await
     }
 
-    async fn delete(&self, id: u64) -> Result<ModelMessageResponse, GTWError> {
+    async fn delete(&self, id: u64) -> Result<DtoMessageResponse, GTWError> {
         let url = format!("{}/data-assets/{}", BASE_URL, id);
 
         let response = self
@@ -264,7 +264,7 @@ impl DataAssestOperation for DataAssestOperationsClient {
             .await
             .map_err(GTWError::NetworkError)?;
 
-        handle_response::<ModelMessageResponse>(response).await
+        handle_response::<DtoMessageResponse>(response).await
     }
 
     async fn download(&self, id: u64) -> Result<FileDownload, GTWError> {
@@ -304,13 +304,11 @@ impl DataAssestOperation for DataAssestOperationsClient {
         &self,
         id: u64,
         wallet_address_list: Vec<String>,
-    ) -> Result<Vec<ModelPublicAcl>, GTWError> {
+    ) -> Result<Vec<DtoPublicAcl>, GTWError> {
         let url = format!("{}/data-assets/{}/share", BASE_URL, id);
-
         let body = json!({
             "addresses": wallet_address_list,
         });
-
         let response = self
             .client
             .post(&url)

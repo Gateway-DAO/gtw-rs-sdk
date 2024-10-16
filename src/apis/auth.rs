@@ -13,11 +13,11 @@ use async_trait::async_trait;
 pub trait AuthOperations {
     async fn login(
         &self,
-        login_credetials: ModelAuthRequest,
-    ) -> Result<ModelTokenResponse, GTWError>;
+        login_credetials: DtoAuthRequest,
+    ) -> Result<DtoTokenResponse, GTWError>;
 
-    async fn get_message(&self) -> Result<ModelMessageResponse, GTWError>;
-    async fn get_refresh_token(&self) -> Result<ModelTokenResponse, GTWError>;
+    async fn get_message(&self) -> Result<DtoMessageResponse, GTWError>;
+    async fn get_refresh_token(&self) -> Result<DtoTokenResponse, GTWError>;
 }
 
 pub struct AuthOperationsClient {
@@ -35,8 +35,8 @@ impl AuthOperationsClient {
 impl AuthOperations for AuthOperationsClient {
     async fn login(
         &self,
-        login_credetials: ModelAuthRequest,
-    ) -> Result<ModelTokenResponse, GTWError> {
+        login_credetials: DtoAuthRequest,
+    ) -> Result<DtoTokenResponse, GTWError> {
         let url = format!("{}/auth", BASE_URL);
 
         let body = json!({
@@ -56,7 +56,7 @@ impl AuthOperations for AuthOperationsClient {
         handle_response(response).await
     }
 
-    async fn get_message(&self) -> Result<ModelMessageResponse, GTWError> {
+    async fn get_message(&self) -> Result<DtoMessageResponse, GTWError> {
         let url = format!("{}/auth/message", BASE_URL);
 
         let response = self
@@ -69,7 +69,7 @@ impl AuthOperations for AuthOperationsClient {
         handle_response(response).await
     }
 
-    async fn get_refresh_token(&self) -> Result<ModelTokenResponse, GTWError> {
+    async fn get_refresh_token(&self) -> Result<DtoTokenResponse, GTWError> {
         let url = format!("{}/auth/refresh-token", BASE_URL);
         let response = self
             .client
