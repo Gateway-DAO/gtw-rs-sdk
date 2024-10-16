@@ -8,13 +8,17 @@ use crate::{
     BASE_URL,
 };
 
+use super::account::AccountOperationsClient;
+
 pub struct DataModelOperationsClient {
     client: Client,
+    pub acl: AccountOperationsClient,
 }
 
 impl DataModelOperationsClient {
     pub fn new(client: Client) -> Self {
-        Self { client }
+        let acl = AccountOperationsClient::new(client.clone());
+        Self { client, acl }
     }
 }
 
@@ -31,7 +35,18 @@ pub trait DataModelOperation {
         page_size: Option<u64>,
     ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError>;
 
-    async fn get_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError>;
+    async fn get(&self, id: u64) -> Result<ModelDataModel, GTWError>;
+
+    async fn create(
+        &self,
+        data_model_input: ModelDataModelRequest,
+    ) -> Result<ModelDataModel, GTWError>;
+
+    async fn update(
+        &self,
+        data_model_id: u64,
+        data_model_input: ModelDataModelRequest,
+    ) -> Result<ModelDataModel, GTWError>;
 }
 
 #[async_trait]
@@ -62,6 +77,54 @@ impl DataModelOperation for DataModelOperationsClient {
         handle_response(response).await
     }
 
+    async fn create(
+        &self,
+        data_model_input: ModelDataModelRequest,
+    ) -> Result<ModelDataModel, GTWError> {
+        let url = format!("{}/data-models", BASE_URL);
+
+        let response = self
+            .client
+            .post(&url)
+            .json(&data_model_input)
+            .send()
+            .await
+            .map_err(GTWError::NetworkError)?;
+
+        handle_response(response).await
+    }
+
+    async fn update(
+        &self,
+        data_model_id: u64,
+        data_model_input: ModelDataModelRequest,
+    ) -> Result<ModelDataModel, GTWError> {
+        let url = format!("{}/data-models/{}", BASE_URL, data_model_id);
+
+        let response = self
+            .client
+            .put(&url)
+            .json(&data_model_input)
+            .send()
+            .await
+            .map_err(GTWError::NetworkError)?;
+
+        handle_response(response).await
+    }
+
+    async fn get(&self, id: u64) -> Result<ModelDataModel, GTWError> {
+        let url = format!("{}/data-models/{}", BASE_URL, id);
+
+        let response = self
+            .client
+            .get(&url)
+            .send()
+            .await
+            .map_err(GTWError::NetworkError)?;
+
+        handle_response(response).await
+    }
+
     async fn get_my(
         &self,
         page: Option<u64>,
@@ -81,19 +144,6 @@ impl DataModelOperation for DataModelOperationsClient {
             .client
             .get(&url)
             .query(&query_params)
-            .send()
-            .await
-            .map_err(GTWError::NetworkError)?;
-
-        handle_response(response).await
-    }
-
-    async fn get_by_id(&self, id: u64) -> Result<ModelDataModel, GTWError> {
-        let url = format!("{}/data-models/{}", BASE_URL, id);
-
-        let response = self
-            .client
-            .get(&url)
             .send()
             .await
             .map_err(GTWError::NetworkError)?;
