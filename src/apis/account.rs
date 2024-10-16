@@ -13,16 +13,18 @@ use super::wallet::{WalletOperations, WalletOperationsClient};
 pub trait AccountOperations {
     async fn create(
         &self,
-        account_details: ModelAccountCreateRequest,
-    ) -> Result<ModelMyAccountResponse, GTWError>;
+        account_details: DtoAccountCreateRequest,
+    ) -> Result<DtoMyAccountResponse, GTWError>;
 
-    async fn get_me(&self) -> Result<ModelMyAccountResponse, GTWError>;
+    async fn get_me(&self) -> Result<DtoMyAccountResponse, GTWError>;
 
     async fn update_me(
         &self,
         profile_picture: &str,
         username: &str,
-    ) -> Result<ModelMyAccountResponse, GTWError>;
+    ) -> Result<DtoMyAccountResponse, GTWError>;
+
+    async fn get_account(&self, did: &str) -> Result<DtoPublicAccountResponse, GTWError>;
 
     fn wallet(&self) -> &dyn WalletOperations;
 }
@@ -43,8 +45,8 @@ impl AccountOperationsClient {
 impl AccountOperations for AccountOperationsClient {
     async fn create(
         &self,
-        account_details: ModelAccountCreateRequest,
-    ) -> Result<ModelMyAccountResponse, GTWError> {
+        account_details: DtoAccountCreateRequest,
+    ) -> Result<DtoMyAccountResponse, GTWError> {
         let url = format!("{}/accounts", BASE_URL);
 
         let body = json!({
@@ -65,7 +67,7 @@ impl AccountOperations for AccountOperationsClient {
         handle_response(response).await
     }
 
-    async fn get_me(&self) -> Result<ModelMyAccountResponse, GTWError> {
+    async fn get_me(&self) -> Result<DtoMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me", BASE_URL);
 
         let response = self
@@ -82,7 +84,7 @@ impl AccountOperations for AccountOperationsClient {
         &self,
         profile_picture: &str,
         username: &str,
-    ) -> Result<ModelMyAccountResponse, GTWError> {
+    ) -> Result<DtoMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me", BASE_URL);
 
         let body = json!({
@@ -94,6 +96,19 @@ impl AccountOperations for AccountOperationsClient {
             .client
             .patch(&url)
             .body(body.to_string())
+            .send()
+            .await
+            .map_err(GTWError::NetworkError)?;
+
+        handle_response(response).await
+    }
+
+    async fn get_account(&self, did: &str) -> Result<DtoPublicAccountResponse, GTWError> {
+        let url = format!("{}/accounts/{}", BASE_URL, did);
+
+        let response = self
+            .client
+            .get(&url)
             .send()
             .await
             .map_err(GTWError::NetworkError)?;
