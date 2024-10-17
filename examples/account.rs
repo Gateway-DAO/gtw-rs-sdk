@@ -1,5 +1,5 @@
 use dotenv::dotenv;
-use gtw_rs_sdk::{models::ModelAuthRequest, GtwSDK};
+use gtw_rs_sdk::{models::DtoAuthRequest, GtwSDK};
 use std::env;
 use tokio;
 
@@ -42,7 +42,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     //  for login
 
-    let login_credetials = ModelAuthRequest {
+    let login_credetials = DtoAuthRequest {
         message: "type your message".to_string(),
         signature: "type your signature".to_string(),
         wallet_address: "type your address".to_string(),

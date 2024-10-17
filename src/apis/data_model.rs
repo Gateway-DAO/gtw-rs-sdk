@@ -33,7 +33,7 @@ pub trait DataModelOperation {
         &self,
         page: Option<u64>,
         page_size: Option<u64>,
-    ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError>;
+    ) -> Result<HelperGenericPaginatedResponse<Vec<DtoDataModelResponse>>, GTWError>;
 
     async fn get(&self, id: u64) -> Result<DtoDataModelResponse, GTWError>;
 

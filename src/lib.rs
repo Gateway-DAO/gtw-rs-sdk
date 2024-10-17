@@ -7,6 +7,7 @@ use apis::{
 use reqwest::Client;
 pub mod apis;
 pub mod models;
+mod services;
 mod utils;
 
 pub const BASE_URL: &str = "https://dev.api.gateway.tech";
@@ -19,6 +20,12 @@ pub struct GtwSDK {
     pub data_model: Box<dyn DataModelOperation>,
     pub data_assest: Box<dyn DataAssetOperation>,
 }
+
+// pub struct config {
+//     bearer_token: Option<String>,
+//     url: String,
+
+// }
 
 impl GtwSDK {
     pub fn new(bearer_token: Option<String>) -> Result<Self, reqwest::Error> {
