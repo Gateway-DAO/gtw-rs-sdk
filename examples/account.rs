@@ -8,7 +8,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
     let bearer_token = env::var("BEARER_TOKEN").expect("BEARER_TOKEN is not set");
-    let gtw_sdk = GtwSDK::new(Some(bearer_token))?;
+    let gtw_sdk = GtwSDK::new(Some(bearer_token));
 
     // Attempt to retrieve account information
     match gtw_sdk.account.get_me().await {

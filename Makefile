@@ -10,6 +10,9 @@ wallet_example:
 account_example:
 		cargo run --example account
 
+auth_example:
+		cargo run --example auth
+
 
 chmod:
 	chmod +x $(SCRIPT_PATH)

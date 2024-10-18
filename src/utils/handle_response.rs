@@ -1,21 +1,22 @@
-use super::error::GTWError;
-use reqwest::Response;
+use crate::utils::error::{GTWError, SurfErrorWrapper};
+use serde::de::DeserializeOwned;
+use surf::Response;
 
-pub async fn handle_response<T: serde::de::DeserializeOwned>(
-    response: Response,
-) -> Result<T, GTWError> {
-    let status = response.status();
-    let body = response
-        .text()
-        .await
-        .map_err(|e| GTWError::UnexpectedError(e.to_string()))?;
+pub async fn handle_response<T: DeserializeOwned>(mut response: Response) -> Result<T, GTWError> {
+    if response.status().is_success() {
+        response
+            .body_json::<T>()
+            .await
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e))) // Treat any error as a network error
+    } else {
+        let error_body = response
+            .body_string()
+            .await
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?;
 
-    if !status.is_success() {
-        return Err(GTWError::ApiError {
-            status: status.as_u16(),
-            message: body,
-        });
+        Err(GTWError::ApiError {
+            status: response.status().into(),
+            message: error_body,
+        })
     }
-
-    serde_json::from_str(&body).map_err(GTWError::JsonError)
 }

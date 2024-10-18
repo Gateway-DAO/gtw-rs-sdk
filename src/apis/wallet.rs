@@ -3,16 +3,8 @@ use crate::{
     utils::{error::*, handle_response::handle_response},
     BASE_URL,
 };
-use reqwest::Client;
 use serde_json::json;
-
-use async_trait::async_trait;
-
-#[async_trait]
-pub trait WalletOperations {
-    async fn add(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError>;
-    async fn remove(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError>;
-}
+use surf::Client;
 
 pub struct WalletOperationsClient {
     client: Client,
@@ -24,20 +16,17 @@ impl WalletOperationsClient {
     }
 }
 
-#[async_trait]
-impl WalletOperations for WalletOperationsClient {
+impl WalletOperationsClient {
     async fn add(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me/wallets", BASE_URL);
 
-        let body = json!({
-          "address" : address
-        });
+        let body = json!({ "address": address });
 
         let response = self
             .client
             .post(&url)
-            .json(&body)
-            .send()
+            .body_json(&body)
+            .map_err(GTWError::NetworkError)?
             .await
             .map_err(GTWError::NetworkError)?;
 
@@ -50,7 +39,6 @@ impl WalletOperations for WalletOperationsClient {
         let response = self
             .client
             .delete(&url)
-            .send()
             .await
             .map_err(GTWError::NetworkError)?;
 

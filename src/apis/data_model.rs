@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use helper_generic_paginated_response::HelperGenericPaginatedResponse;
-use reqwest::Client;
+use surf::Client;
 
 use crate::{
     models::*,
@@ -29,6 +29,7 @@ pub trait DataModelOperation {
         page: Option<u64>,
         page_size: Option<u64>,
     ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError>;
+
     async fn get_my(
         &self,
         page: Option<u64>,
@@ -58,22 +59,15 @@ impl DataModelOperation for DataModelOperationsClient {
     ) -> Result<HelperGenericPaginatedResponse<Vec<ModelDataModel>>, GTWError> {
         let url = format!("{}/data-models", BASE_URL);
 
-        let mut query_params = vec![];
+        let mut request = self.client.get(&url);
         if let Some(page) = page {
-            query_params.push(("page", page.to_string()));
+            request = request.query(&[("page", page.to_string())])?;
         }
         if let Some(page_size) = page_size {
-            query_params.push(("page_size", page_size.to_string()));
+            request = request.query(&[("page_size", page_size.to_string())])?;
         }
 
-        let response = self
-            .client
-            .get(&url)
-            .query(&query_params)
-            .send()
-            .await
-            .map_err(GTWError::NetworkError)?;
-
+        let response = request.await.map_err(GTWError::NetworkError)?;
         handle_response(response).await
     }
 
@@ -86,8 +80,8 @@ impl DataModelOperation for DataModelOperationsClient {
         let response = self
             .client
             .post(&url)
-            .json(&data_model_input)
-            .send()
+            .body_json(&data_model_input)
+            .map_err(GTWError::NetworkError)?
             .await
             .map_err(GTWError::NetworkError)?;
 
@@ -104,8 +98,8 @@ impl DataModelOperation for DataModelOperationsClient {
         let response = self
             .client
             .put(&url)
-            .json(&data_model_input)
-            .send()
+            .body_json(&data_model_input)
+            .map_err(GTWError::NetworkError)?
             .await
             .map_err(GTWError::NetworkError)?;
 
@@ -118,7 +112,6 @@ impl DataModelOperation for DataModelOperationsClient {
         let response = self
             .client
             .get(&url)
-            .send()
             .await
             .map_err(GTWError::NetworkError)?;
 
@@ -132,22 +125,15 @@ impl DataModelOperation for DataModelOperationsClient {
     ) -> Result<HelperGenericPaginatedResponse<Vec<DtoDataModelResponse>>, GTWError> {
         let url = format!("{}/data-models/me", BASE_URL);
 
-        let mut query_params = vec![];
+        let mut request = self.client.get(&url);
         if let Some(page) = page {
-            query_params.push(("page", page.to_string()));
+            request = request.query(&[("page", page.to_string())]);
         }
         if let Some(page_size) = page_size {
-            query_params.push(("page_size", page_size.to_string()));
+            request = request.query(&[("page_size", page_size.to_string())]);
         }
 
-        let response = self
-            .client
-            .get(&url)
-            .query(&query_params)
-            .send()
-            .await
-            .map_err(GTWError::NetworkError)?;
-
+        let response = request.await.map_err(GTWError::NetworkError)?;
         handle_response(response).await
     }
 }

@@ -1,33 +1,11 @@
 use crate::{
     models::*,
     utils::{error::*, handle_response::handle_response},
-    BASE_URL,
 };
-use async_trait::async_trait;
-use reqwest::Client;
 use serde_json::json;
+use surf::Client;
 
-use super::wallet::{WalletOperations, WalletOperationsClient};
-
-#[async_trait]
-pub trait AccountOperations {
-    async fn create(
-        &self,
-        account_details: DtoAccountCreateRequest,
-    ) -> Result<DtoMyAccountResponse, GTWError>;
-
-    async fn get_me(&self) -> Result<DtoMyAccountResponse, GTWError>;
-
-    async fn update_me(
-        &self,
-        profile_picture: &str,
-        username: &str,
-    ) -> Result<DtoMyAccountResponse, GTWError>;
-
-    async fn get_account(&self, did: &str) -> Result<DtoPublicAccountResponse, GTWError>;
-
-    fn wallet(&self) -> &dyn WalletOperations;
-}
+use super::wallet::WalletOperationsClient;
 
 pub struct AccountOperationsClient {
     client: Client,
@@ -41,13 +19,12 @@ impl AccountOperationsClient {
     }
 }
 
-#[async_trait]
-impl AccountOperations for AccountOperationsClient {
+impl AccountOperationsClient {
     async fn create(
         &self,
         account_details: DtoAccountCreateRequest,
     ) -> Result<DtoMyAccountResponse, GTWError> {
-        let url = format!("{}/accounts", BASE_URL);
+        let url = format!("/accounts");
 
         let body = json!({
             "message": account_details.message,
@@ -59,8 +36,8 @@ impl AccountOperations for AccountOperationsClient {
         let response = self
             .client
             .post(&url)
-            .body(body.to_string())
-            .send()
+            .body_json(&body)
+            .map_err(GTWError::NetworkError)?
             .await
             .map_err(GTWError::NetworkError)?;
 
@@ -68,12 +45,11 @@ impl AccountOperations for AccountOperationsClient {
     }
 
     async fn get_me(&self) -> Result<DtoMyAccountResponse, GTWError> {
-        let url = format!("{}/accounts/me", BASE_URL);
+        let url = format!("/accounts/me");
 
         let response = self
             .client
             .get(&url)
-            .send()
             .await
             .map_err(GTWError::NetworkError)?;
 
@@ -85,7 +61,7 @@ impl AccountOperations for AccountOperationsClient {
         profile_picture: &str,
         username: &str,
     ) -> Result<DtoMyAccountResponse, GTWError> {
-        let url = format!("{}/accounts/me", BASE_URL);
+        let url = format!("/accounts/me");
 
         let body = json!({
             "profile_picture": profile_picture,
@@ -95,8 +71,8 @@ impl AccountOperations for AccountOperationsClient {
         let response = self
             .client
             .patch(&url)
-            .body(body.to_string())
-            .send()
+            .body_json(&body)
+            .map_err(GTWError::NetworkError)?
             .await
             .map_err(GTWError::NetworkError)?;
 
@@ -104,19 +80,14 @@ impl AccountOperations for AccountOperationsClient {
     }
 
     async fn get_account(&self, did: &str) -> Result<DtoPublicAccountResponse, GTWError> {
-        let url = format!("{}/accounts/{}", BASE_URL, did);
+        let url = format!("/accounts/{}", did);
 
         let response = self
             .client
             .get(&url)
-            .send()
             .await
             .map_err(GTWError::NetworkError)?;
 
         handle_response(response).await
-    }
-
-    fn wallet(&self) -> &dyn WalletOperations {
-        &self.wallet
     }
 }
