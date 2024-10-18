@@ -1,3 +1,4 @@
+use apis::account::AccountOperationsClient;
 use apis::auth::AuthOperationsClient;
 use std::str::FromStr;
 use surf::http::headers::{HeaderName, HeaderValue};
@@ -13,6 +14,7 @@ pub const BASE_URL: &str = "https://dev.api.gateway.tech";
 pub struct GtwSDK {
     client: Client,
     pub auth: AuthOperationsClient,
+    pub account: AccountOperationsClient,
 }
 
 impl GtwSDK {
@@ -33,9 +35,13 @@ impl GtwSDK {
 
         let client: Client = config.try_into()?;
 
-        // let account = AccountOperationsClient::new(client.clone());
+        let account = AccountOperationsClient::new(client.clone());
         let auth = AuthOperationsClient::new(client.clone());
 
-        Ok(GtwSDK { client, auth })
+        Ok(GtwSDK {
+            client,
+            account,
+            auth,
+        })
     }
 }

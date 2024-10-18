@@ -14,10 +14,8 @@ impl WalletOperationsClient {
     pub fn new(client: Client) -> Self {
         Self { client }
     }
-}
 
-impl WalletOperationsClient {
-    async fn add(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
+    pub async fn add(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me/wallets", BASE_URL);
 
         let body = json!({ "address": address });
@@ -26,21 +24,21 @@ impl WalletOperationsClient {
             .client
             .post(&url)
             .body_json(&body)
-            .map_err(GTWError::NetworkError)?
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?
             .await
-            .map_err(GTWError::NetworkError)?;
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?;
 
         handle_response(response).await
     }
 
-    async fn remove(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
+    pub async fn remove(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
         let url = format!("{}/accounts/me/wallets/{}", BASE_URL, address);
 
         let response = self
             .client
             .delete(&url)
             .await
-            .map_err(GTWError::NetworkError)?;
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?;
 
         handle_response(response).await
     }

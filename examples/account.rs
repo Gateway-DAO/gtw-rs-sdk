@@ -1,5 +1,5 @@
 use dotenv::dotenv;
-use gtw_rs_sdk::{models::DtoAuthRequest, GtwSDK};
+use gtw_rs_sdk::{models::DtoAccountCreateRequest, GtwSDK};
 use std::env;
 use tokio;
 
@@ -8,7 +8,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
     let bearer_token = env::var("BEARER_TOKEN").expect("BEARER_TOKEN is not set");
-    let gtw_sdk = GtwSDK::new(Some(bearer_token));
+    let gtw_sdk = GtwSDK::new(Some(bearer_token)).await?;
 
     // Attempt to retrieve account information
     match gtw_sdk.account.get_me().await {
@@ -21,7 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Attempt to update account information
-    match gtw_sdk.account.update_me("hello", "r11manish").await {
+    match gtw_sdk.account.update_me("hhd", "r11manish").await {
         Ok(update_account_info) => {
             println!("Updated Account Info: {:?}", update_account_info.username);
         }
@@ -30,31 +30,30 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // for generate message
-    match gtw_sdk.auth.get_message().await {
-        Ok(data) => {
-            println!("Updated Account Info: {:?}", data.message);
+    // let new_account_details = DtoAccountCreateRequest {
+    //     message: "Create Account".to_string(),
+    //     signature: "your_signature".to_string(),
+    //     username: "new_username".to_string(),
+    //     wallet_address: "your_wallet_address".to_string(),
+    // };
+
+    // match gtw_sdk.account.create(new_account_details).await {
+    //     Ok(new_account_info) => {
+    //         println!("Created Account Info: {:?}", new_account_info);
+    //     }
+    //     Err(e) => {
+    //         eprintln!("Failed to create account: {}", e);
+    //     }
+    // }
+
+    let did =
+        "did:gatewayid:gateway:d8111b22ac98014ce832f3a6f648d1d6ac0ef833094d2a9bfc26900488acb9ad";
+    match gtw_sdk.account.get_account(did).await {
+        Ok(account) => {
+            println!("Account username: {:?}", account.username);
         }
         Err(e) => {
-            eprintln!("Failed to update account info: {}", e);
-        }
-    }
-
-    //  for login
-
-    let login_credetials = DtoAuthRequest {
-        message: "type your message".to_string(),
-        signature: "type your signature".to_string(),
-        wallet_address: "type your address".to_string(),
-    };
-
-    // Attempt to log in
-    match gtw_sdk.auth.login(login_credetials).await {
-        Ok(token_response) => {
-            println!("Login successful! Token: {:?}", token_response.token);
-        }
-        Err(e) => {
-            eprintln!("Login failed: {}", e);
+            eprintln!("Failed to retrieve account: {}", e);
         }
     }
 
