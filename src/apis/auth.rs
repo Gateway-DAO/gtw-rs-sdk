@@ -13,9 +13,7 @@ impl AuthOperationsClient {
     pub fn new(client: Client) -> Self {
         Self { client }
     }
-}
 
-impl AuthOperationsClient {
     pub async fn login(
         &self,
         login_credentials: DtoAuthRequest,
@@ -33,7 +31,7 @@ impl AuthOperationsClient {
             .post(&url)
             .body(body.to_string())
             .await
-            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?; // Wrap surf::Error
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?; 
 
         handle_response(response).await
     }

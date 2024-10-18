@@ -7,7 +7,7 @@ pub async fn handle_response<T: DeserializeOwned>(mut response: Response) -> Res
         response
             .body_json::<T>()
             .await
-            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e))) // Treat any error as a network error
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))
     } else {
         let error_body = response
             .body_string()

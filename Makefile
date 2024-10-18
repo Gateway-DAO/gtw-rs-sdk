@@ -13,6 +13,10 @@ account_example:
 auth_example:
 		cargo run --example auth
 
+data_model_example:
+		cargo run --example data_model
+
+
 
 chmod:
 	chmod +x $(SCRIPT_PATH)

@@ -18,9 +18,6 @@ pub enum GTWError {
     #[error("Network error: {0}")]
     NetworkError(#[from] SurfErrorWrapper), // Wrap Surf errors
 
-    #[error("JSON parsing error: {0}")]
-    JsonError(#[from] serde_json::Error), // Handle Serde JSON errors
-
     #[error("API error: Status {status}, Message: {message}")]
     ApiError { status: u16, message: String },
 

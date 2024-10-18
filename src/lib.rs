@@ -1,5 +1,6 @@
 use apis::account::AccountOperationsClient;
 use apis::auth::AuthOperationsClient;
+use apis::data_model::{self, DataModelOperationsClient};
 use std::str::FromStr;
 use surf::http::headers::{HeaderName, HeaderValue};
 use surf::{Client, Config};
@@ -15,6 +16,7 @@ pub struct GtwSDK {
     client: Client,
     pub auth: AuthOperationsClient,
     pub account: AccountOperationsClient,
+    pub data_model: DataModelOperationsClient,
 }
 
 impl GtwSDK {
@@ -37,11 +39,13 @@ impl GtwSDK {
 
         let account = AccountOperationsClient::new(client.clone());
         let auth = AuthOperationsClient::new(client.clone());
+        let data_model = DataModelOperationsClient::new(client.clone());
 
         Ok(GtwSDK {
             client,
             account,
             auth,
+            data_model,
         })
     }
 }
