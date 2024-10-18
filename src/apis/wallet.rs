@@ -1,7 +1,6 @@
 use crate::{
     models::*,
     utils::{error::*, handle_response::handle_response},
-    BASE_URL,
 };
 use serde_json::json;
 use surf::Client;
@@ -16,7 +15,7 @@ impl WalletOperationsClient {
     }
 
     pub async fn add(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
-        let url = format!("{}/accounts/me/wallets", BASE_URL);
+        let url = format!("/accounts/me/wallets");
 
         let body = json!({ "address": address });
 
@@ -32,7 +31,7 @@ impl WalletOperationsClient {
     }
 
     pub async fn remove(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
-        let url = format!("{}/accounts/me/wallets/{}", BASE_URL, address);
+        let url = format!("/accounts/me/wallets/{}", address);
 
         let response = self
             .client
