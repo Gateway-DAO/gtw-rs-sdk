@@ -15,7 +15,6 @@ pub struct GtwSDK {
     pub auth: AuthOperationsClient,
     pub account: AccountOperationsClient,
     pub data_model: DataModelOperationsClient,
-    pub wallet: Option<WalletService>,
 }
 
 #[derive(Clone, Debug)]
@@ -76,7 +75,6 @@ impl GtwSDK {
             auth,
             account,
             data_model,
-            wallet,
         })
     }
 }

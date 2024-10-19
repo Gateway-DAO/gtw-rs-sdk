@@ -10,6 +10,9 @@ pub struct EthereumService {
     wallet: LocalWallet,
 }
 
+
+
+
 impl EthereumService {
     pub fn new(wallet_private_key: &str) -> Result<Self, Box<dyn Error + Send + Sync>> {
         let wallet = Self::generate_new_ethereum_wallet_using_private_key(wallet_private_key)?;
@@ -48,6 +51,7 @@ impl BlockchainWallet for EthereumService {
         if signature_bytes[64] < 27 {
             signature_bytes[64] += 27;
         }
+
 
         Ok(WalletSignMessage {
             signature: hex_encode(signature_bytes),
