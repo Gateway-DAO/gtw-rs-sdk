@@ -173,6 +173,134 @@ impl From<&DtoAuthRequest> for DtoAuthRequest {
         value.clone()
     }
 }
+#[doc = "DtoComputeRequestCreateRequest"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"compute_field_name\","]
+#[doc = "    \"compute_operation\","]
+#[doc = "    \"data_model_id\","]
+#[doc = "    \"description\","]
+#[doc = "    \"title\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"compute_field_name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"compute_operation\": {"]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"add\","]
+#[doc = "        \"subtract\","]
+#[doc = "        \"multiply\","]
+#[doc = "        \"divide\","]
+#[doc = "        \"less_than\","]
+#[doc = "        \"equal\","]
+#[doc = "        \"not_equal\","]
+#[doc = "        \"sum\","]
+#[doc = "        \"greater_than\","]
+#[doc = "        \"greater_than_or_equal\""]
+#[doc = "      ],"]
+#[doc = "      \"allOf\": ["]
+#[doc = "        {"]
+#[doc = "          \"$ref\": \"#/definitions/types.ComputeOperation\""]
+#[doc = "        }"]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"data_model_id\": {"]
+#[doc = "      \"type\": \"integer\""]
+#[doc = "    },"]
+#[doc = "    \"description\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"title\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DtoComputeRequestCreateRequest {
+    pub compute_field_name: String,
+    pub compute_operation: TypesComputeOperation,
+    pub data_model_id: i64,
+    pub description: String,
+    pub title: String,
+}
+impl From<&DtoComputeRequestCreateRequest> for DtoComputeRequestCreateRequest {
+    fn from(value: &DtoComputeRequestCreateRequest) -> Self {
+        value.clone()
+    }
+}
+#[doc = "DtoComputeRequestCreateResponse"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"compute_field_name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"compute_operation\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"created_at\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"created_by\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"data_model_id\": {"]
+#[doc = "      \"type\": \"integer\""]
+#[doc = "    },"]
+#[doc = "    \"description\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"id\": {"]
+#[doc = "      \"type\": \"integer\""]
+#[doc = "    },"]
+#[doc = "    \"title\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"updated_at\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DtoComputeRequestCreateResponse {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub compute_field_name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub compute_operation: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub data_model_id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
+}
+impl From<&DtoComputeRequestCreateResponse> for DtoComputeRequestCreateResponse {
+    fn from(value: &DtoComputeRequestCreateResponse) -> Self {
+        value.clone()
+    }
+}
 #[doc = "DtoCreateDataAssetRequest"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -967,76 +1095,6 @@ impl From<&HelperPaginatedResponse> for HelperPaginatedResponse {
         value.clone()
     }
 }
-#[doc = "ModelDataModel"]
-#[doc = r""]
-#[doc = r" <details><summary>JSON schema</summary>"]
-#[doc = r""]
-#[doc = r" ```json"]
-#[doc = "{"]
-#[doc = "  \"type\": \"object\","]
-#[doc = "  \"required\": ["]
-#[doc = "    \"created_at\","]
-#[doc = "    \"created_by\","]
-#[doc = "    \"description\","]
-#[doc = "    \"id\","]
-#[doc = "    \"schema\","]
-#[doc = "    \"title\","]
-#[doc = "    \"updated_at\""]
-#[doc = "  ],"]
-#[doc = "  \"properties\": {"]
-#[doc = "    \"created_at\": {"]
-#[doc = "      \"type\": \"string\""]
-#[doc = "    },"]
-#[doc = "    \"created_by\": {"]
-#[doc = "      \"type\": \"string\""]
-#[doc = "    },"]
-#[doc = "    \"deleted_at\": {"]
-#[doc = "      \"type\": \"string\""]
-#[doc = "    },"]
-#[doc = "    \"description\": {"]
-#[doc = "      \"type\": \"string\""]
-#[doc = "    },"]
-#[doc = "    \"id\": {"]
-#[doc = "      \"type\": \"integer\""]
-#[doc = "    },"]
-#[doc = "    \"schema\": {"]
-#[doc = "      \"type\": \"object\""]
-#[doc = "    },"]
-#[doc = "    \"tags\": {"]
-#[doc = "      \"type\": \"array\","]
-#[doc = "      \"items\": {"]
-#[doc = "        \"type\": \"string\""]
-#[doc = "      }"]
-#[doc = "    },"]
-#[doc = "    \"title\": {"]
-#[doc = "      \"type\": \"string\""]
-#[doc = "    },"]
-#[doc = "    \"updated_at\": {"]
-#[doc = "      \"type\": \"string\""]
-#[doc = "    }"]
-#[doc = "  }"]
-#[doc = "}"]
-#[doc = r" ```"]
-#[doc = r" </details>"]
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ModelDataModel {
-    pub created_at: String,
-    pub created_by: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub deleted_at: Option<String>,
-    pub description: String,
-    pub id: i64,
-    pub schema: serde_json::Map<String, serde_json::Value>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub tags: Vec<String>,
-    pub title: String,
-    pub updated_at: String,
-}
-impl From<&ModelDataModel> for ModelDataModel {
-    fn from(value: &ModelDataModel) -> Self {
-        value.clone()
-    }
-}
 #[doc = "ModelWalletAddress"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -1189,6 +1247,120 @@ impl std::convert::TryFrom<&String> for TypesAccessLevel {
     }
 }
 impl std::convert::TryFrom<String> for TypesAccessLevel {
+    type Error = self::error::ConversionError;
+    fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+#[doc = "TypesComputeOperation"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"add\","]
+#[doc = "    \"subtract\","]
+#[doc = "    \"multiply\","]
+#[doc = "    \"divide\","]
+#[doc = "    \"sum\","]
+#[doc = "    \"greater_than\","]
+#[doc = "    \"greater_than_or_equal\","]
+#[doc = "    \"less_than\","]
+#[doc = "    \"equal\","]
+#[doc = "    \"not_equal\""]
+#[doc = "  ],"]
+#[doc = "  \"x-enum-varnames\": ["]
+#[doc = "    \"ComputeOperationAdd\","]
+#[doc = "    \"ComputeOperationSubtract\","]
+#[doc = "    \"ComputeOperationMultiply\","]
+#[doc = "    \"ComputeOperationDivide\","]
+#[doc = "    \"ComputeOperationSum\","]
+#[doc = "    \"ComputeOperationGreaterThan\","]
+#[doc = "    \"ComputeOperationGreaterThanOrEqual\","]
+#[doc = "    \"ComputeOperationLessThan\","]
+#[doc = "    \"ComputeOperationEqual\","]
+#[doc = "    \"ComputeOperationNotEqual\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum TypesComputeOperation {
+    #[serde(rename = "add")]
+    Add,
+    #[serde(rename = "subtract")]
+    Subtract,
+    #[serde(rename = "multiply")]
+    Multiply,
+    #[serde(rename = "divide")]
+    Divide,
+    #[serde(rename = "sum")]
+    Sum,
+    #[serde(rename = "greater_than")]
+    GreaterThan,
+    #[serde(rename = "greater_than_or_equal")]
+    GreaterThanOrEqual,
+    #[serde(rename = "less_than")]
+    LessThan,
+    #[serde(rename = "equal")]
+    Equal,
+    #[serde(rename = "not_equal")]
+    NotEqual,
+}
+impl From<&TypesComputeOperation> for TypesComputeOperation {
+    fn from(value: &TypesComputeOperation) -> Self {
+        value.clone()
+    }
+}
+impl ToString for TypesComputeOperation {
+    fn to_string(&self) -> String {
+        match *self {
+            Self::Add => "add".to_string(),
+            Self::Subtract => "subtract".to_string(),
+            Self::Multiply => "multiply".to_string(),
+            Self::Divide => "divide".to_string(),
+            Self::Sum => "sum".to_string(),
+            Self::GreaterThan => "greater_than".to_string(),
+            Self::GreaterThanOrEqual => "greater_than_or_equal".to_string(),
+            Self::LessThan => "less_than".to_string(),
+            Self::Equal => "equal".to_string(),
+            Self::NotEqual => "not_equal".to_string(),
+        }
+    }
+}
+impl std::str::FromStr for TypesComputeOperation {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        match value {
+            "add" => Ok(Self::Add),
+            "subtract" => Ok(Self::Subtract),
+            "multiply" => Ok(Self::Multiply),
+            "divide" => Ok(Self::Divide),
+            "sum" => Ok(Self::Sum),
+            "greater_than" => Ok(Self::GreaterThan),
+            "greater_than_or_equal" => Ok(Self::GreaterThanOrEqual),
+            "less_than" => Ok(Self::LessThan),
+            "equal" => Ok(Self::Equal),
+            "not_equal" => Ok(Self::NotEqual),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl std::convert::TryFrom<&str> for TypesComputeOperation {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl std::convert::TryFrom<&String> for TypesComputeOperation {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl std::convert::TryFrom<String> for TypesComputeOperation {
     type Error = self::error::ConversionError;
     fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
         value.parse()
