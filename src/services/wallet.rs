@@ -22,6 +22,7 @@ pub struct WalletSignMessage {
     pub signing_key: Address,
 }
 
+
 pub struct WalletService {
     wallet: Box<dyn BlockchainWallet + Send + Sync>,
 }

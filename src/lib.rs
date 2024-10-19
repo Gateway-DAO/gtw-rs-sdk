@@ -1,7 +1,7 @@
 use apis::account::AccountOperationsClient;
 use apis::auth::AuthOperationsClient;
 use apis::data_model::DataModelOperationsClient;
-use middleware::header_middlware::HeaderMiddleware;
+use middleware::{auth_middleware::AuthMiddleware, header_middlware::HeaderMiddleware};
 use services::wallet::{WalletService, WalletType};
 use surf::{Client, Config, Result};
 
@@ -51,22 +51,27 @@ impl GtwSDK {
 
         let mut client: Client = config.try_into()?;
 
-        // Borrow the bearer token to avoid moving it.
         if let Some(ref bearer_token) = sdk_config.bearer_token {
             client = client.with(HeaderMiddleware {
                 bearer_token: Some(bearer_token.clone()),
             });
         }
 
-        // Initialize the wallet only if both wallet type and private key are present.
-        let wallet = match (sdk_config.wallet, sdk_config.private_key) {
-            (Some(wallet_type), Some(private_key)) if sdk_config.bearer_token.is_none() => {
-                Some(WalletService::new(private_key, Some(wallet_type)))
+        let wallet = if sdk_config.bearer_token.is_none() {
+            match (sdk_config.wallet, sdk_config.private_key) {
+                (Some(wallet_type), Some(private_key)) => {
+                    Some(WalletService::new(private_key, Some(wallet_type)).await?)
+                }
+                _ => None,
             }
-            _ => None,
+        } else {
+            None
         };
 
-        // Initialize operation clients.
+        if let Some(wallet) = wallet {
+            client = client.with(AuthMiddleware { wallet });
+        }
+
         let account = AccountOperationsClient::new(client.clone());
         let auth = AuthOperationsClient::new(client.clone());
         let data_model = DataModelOperationsClient::new(client);

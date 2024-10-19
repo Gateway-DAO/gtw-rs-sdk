@@ -8,7 +8,7 @@ use surf::Client;
 
 use super::error::GTWError;
 
-pub fn is_token_expired(token: &str) -> bool {
+pub async fn is_token_expired(token: &str) -> bool {
     let parts: Vec<&str> = token.split('.').collect();
     if parts.len() != 3 {
         return true;
@@ -33,7 +33,7 @@ pub fn is_token_expired(token: &str) -> bool {
     true
 }
 
-pub async fn issue_jwt_token(client: Client, wallet: WalletService) -> Result<String, GTWError> {
+pub async fn issue_jwt_token(client: Client, wallet: &WalletService) -> Result<String, GTWError> {
     let auth = AuthOperationsClient::new(client.clone());
 
     let sign_message = auth
