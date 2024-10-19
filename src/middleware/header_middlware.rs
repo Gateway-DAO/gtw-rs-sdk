@@ -1,6 +1,6 @@
 use surf::middleware::{Middleware, Next};
 use surf::utils::async_trait;
-use surf::{Client, Config, Request, Response, Result};
+use surf::{Client, Request, Response, Result};
 
 #[derive(Clone, Debug)]
 pub struct HeaderMiddleware {

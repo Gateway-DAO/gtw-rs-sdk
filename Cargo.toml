@@ -17,4 +17,5 @@ hex = "0.4"
 ethers = "2.0.14"
 http-types = "2.12.0"
 jsonwebtoken = "8.2"
+base64 = "0.22.1"
 
