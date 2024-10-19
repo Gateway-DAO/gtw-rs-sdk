@@ -1,24 +1,9 @@
 use crate::{
     models::*,
     utils::{error::*, handle_response::handle_response},
-    BASE_URL,
 };
-use reqwest::Client;
 use serde_json::json;
-
-use async_trait::async_trait;
-
-#[async_trait]
-
-pub trait AuthOperations {
-    async fn login(
-        &self,
-        login_credetials: DtoAuthRequest,
-    ) -> Result<DtoTokenResponse, GTWError>;
-
-    async fn get_message(&self) -> Result<DtoMessageResponse, GTWError>;
-    async fn get_refresh_token(&self) -> Result<DtoTokenResponse, GTWError>;
-}
+use surf::Client;
 
 pub struct AuthOperationsClient {
     client: Client,
@@ -28,55 +13,49 @@ impl AuthOperationsClient {
     pub fn new(client: Client) -> Self {
         Self { client }
     }
-}
 
-#[async_trait]
-
-impl AuthOperations for AuthOperationsClient {
-    async fn login(
+    pub async fn login(
         &self,
-        login_credetials: DtoAuthRequest,
+        login_credentials: DtoAuthRequest,
     ) -> Result<DtoTokenResponse, GTWError> {
-        let url = format!("{}/auth", BASE_URL);
+        let url = format!("/auth");
 
         let body = json!({
-            "message": login_credetials.message,
-            "signature": login_credetials.signature,
-            "wallet_address": login_credetials.wallet_address
+            "message": login_credentials.message,
+            "signature": login_credentials.signature,
+            "wallet_address": login_credentials.wallet_address
         });
 
         let response = self
             .client
             .post(&url)
             .body(body.to_string())
-            .send()
             .await
-            .map_err(GTWError::NetworkError)?;
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?; 
 
         handle_response(response).await
     }
 
-    async fn get_message(&self) -> Result<DtoMessageResponse, GTWError> {
-        let url = format!("{}/auth/message", BASE_URL);
+    pub async fn get_message(&self) -> Result<DtoMessageResponse, GTWError> {
+        let url = format!("/auth/message");
 
         let response = self
             .client
             .get(&url)
-            .send()
             .await
-            .map_err(GTWError::NetworkError)?;
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?; // Wrap surf::Error
 
         handle_response(response).await
     }
 
-    async fn get_refresh_token(&self) -> Result<DtoTokenResponse, GTWError> {
-        let url = format!("{}/auth/refresh-token", BASE_URL);
+    pub async fn get_refresh_token(&self) -> Result<DtoTokenResponse, GTWError> {
+        let url = format!("/auth/refresh-token");
+
         let response = self
             .client
             .get(&url)
-            .send()
             .await
-            .map_err(GTWError::NetworkError)?;
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?; // Wrap surf::Error
 
         handle_response(response).await
     }

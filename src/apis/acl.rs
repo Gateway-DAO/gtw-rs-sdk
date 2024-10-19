@@ -6,26 +6,7 @@ use crate::{
 use async_trait::async_trait;
 use reqwest::Client;
 
-#[async_trait]
-pub trait AclOperations {
-    async fn update(
-        &self,
-        id: u64,
-        acl_list: Vec<DtoAclRequest>,
-    ) -> Result<Vec<DtoPublicAcl>, GTWError>;
 
-    async fn add(
-        &self,
-        id: u64,
-        acl_list: Vec<DtoAclRequest>,
-    ) -> Result<Vec<DtoPublicAcl>, GTWError>;
-
-    async fn delete(
-        &self,
-        id: u64,
-        acl_list: DtoDeleteAclRequest,
-    ) -> Result<DtoMessageResponse, GTWError>;
-}
 
 pub struct AclOperationsClient {
     client: Client,

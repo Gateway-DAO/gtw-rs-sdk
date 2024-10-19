@@ -1,18 +1,9 @@
 use crate::{
     models::*,
     utils::{error::*, handle_response::handle_response},
-    BASE_URL,
 };
-use reqwest::Client;
 use serde_json::json;
-
-use async_trait::async_trait;
-
-#[async_trait]
-pub trait WalletOperations {
-    async fn add(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError>;
-    async fn remove(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError>;
-}
+use surf::Client;
 
 pub struct WalletOperationsClient {
     client: Client,
@@ -22,37 +13,31 @@ impl WalletOperationsClient {
     pub fn new(client: Client) -> Self {
         Self { client }
     }
-}
 
-#[async_trait]
-impl WalletOperations for WalletOperationsClient {
-    async fn add(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
-        let url = format!("{}/accounts/me/wallets", BASE_URL);
+    pub async fn add(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
+        let url = format!("/accounts/me/wallets");
 
-        let body = json!({
-          "address" : address
-        });
+        let body = json!({ "address": address });
 
         let response = self
             .client
             .post(&url)
-            .json(&body)
-            .send()
+            .body_json(&body)
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?
             .await
-            .map_err(GTWError::NetworkError)?;
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?;
 
         handle_response(response).await
     }
 
-    async fn remove(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
-        let url = format!("{}/accounts/me/wallets/{}", BASE_URL, address);
+    pub async fn remove(&self, address: &str) -> Result<DtoMyAccountResponse, GTWError> {
+        let url = format!("/accounts/me/wallets/{}", address);
 
         let response = self
             .client
             .delete(&url)
-            .send()
             .await
-            .map_err(GTWError::NetworkError)?;
+            .map_err(|e| GTWError::NetworkError(SurfErrorWrapper(e)))?;
 
         handle_response(response).await
     }
