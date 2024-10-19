@@ -1,5 +1,7 @@
 use dotenv::dotenv;
-use gtw_rs_sdk::{models::DtoAccountCreateRequest, GtwSDK, SdkConfig};
+use gtw_rs_sdk::{
+    models::DtoAccountCreateRequest, services::wallet::WalletType, GtwSDK, SdkConfig,
+};
 use std::env;
 use tokio;
 
@@ -9,13 +11,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
     // Initialize SDK with configuration
-    let bearer_token = env::var("BEARER_TOKEN").expect("BEARER_TOKEN must be set in environment");
+    // let bearer_token = env::var("BEARER_TOKEN").expect("BEARER_TOKEN must be set in environment");
     let api_url =
         env::var("API_URL").unwrap_or_else(|_| "https://dev.api.gateway.tech".to_string());
 
     let sdk_config = SdkConfig {
         api_url: Some(api_url),
-        bearer_token: Some(bearer_token),
+        bearer_token: None,
+        wallet: Some(WalletType::Ethereum),
+        private_key: Some("".to_string()),
     };
 
     let gtw_sdk = GtwSDK::new(sdk_config).await?;
@@ -31,14 +35,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Update account information
-    match gtw_sdk.account.update_me("hhd", "r11manish").await {
-        Ok(update_account_info) => {
-            println!("Updated Account Info: {:?}", update_account_info.username);
-        }
-        Err(e) => {
-            eprintln!("Failed to update account info: {}", e);
-        }
-    }
+    // match gtw_sdk.account.update_me("hhd", "r11manish").await {
+    //     Ok(update_account_info) => {
+    //         println!("Updated Account Info: {:?}", update_account_info.username);
+    //     }
+    //     Err(e) => {
+    //         eprintln!("Failed to update account info: {}", e);
+    //     }
+    // }
 
     // Example of creating a new account
     /*
@@ -60,16 +64,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     */
 
     // Get specific account by DID
-    let did =
-        "did:gatewayid:gateway:d8111b22ac98014ce832f3a6f648d1d6ac0ef833094d2a9bfc26900488acb9ad";
-    match gtw_sdk.account.get_account(did).await {
-        Ok(account) => {
-            println!("Account username: {:?}", account.username);
-        }
-        Err(e) => {
-            eprintln!("Failed to retrieve account: {}", e);
-        }
-    }
+    // let did =
+    //     "did:gatewayid:gateway:d8111b22ac98014ce832f3a6f648d1d6ac0ef833094d2a9bfc26900488acb9ad";
+    // match gtw_sdk.account.get_account(did).await {
+    //     Ok(account) => {
+    //         println!("Account username: {:?}", account.username);
+    //     }
+    //     Err(e) => {
+    //         eprintln!("Failed to retrieve account: {}", e);
+    //     }
+    // }
 
     Ok(())
 }

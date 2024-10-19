@@ -19,9 +19,8 @@ pub enum WalletType {
 
 pub struct WalletSignMessage {
     pub signature: String,
-    pub signing_key: Address,
+    pub signing_key: String,
 }
-
 
 pub struct WalletService {
     wallet: Box<dyn BlockchainWallet + Send + Sync>,

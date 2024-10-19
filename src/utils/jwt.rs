@@ -39,24 +39,24 @@ pub async fn issue_jwt_token(client: Client, wallet: &WalletService) -> Result<S
     let sign_message = auth
         .get_message()
         .await
-        .map_err(|e| GTWError::UnexpectedError(format!("Network error: {}", e)))?
+        .map_err(|e| GTWError::UnexpectedError(format!("{}", e)))?
         .message;
 
     let signature_details = wallet
         .sign_message(&sign_message)
         .await
-        .map_err(|e| GTWError::UnexpectedError(format!("Failed to sign message: {}", e)))?;
+        .map_err(|e| GTWError::UnexpectedError(format!("{}", e)))?;
 
     let login_credentials = DtoAuthRequest {
         message: sign_message,
         signature: signature_details.signature,
-        wallet_address: signature_details.signing_key.to_string(),
+        wallet_address: signature_details.signing_key,
     };
 
     match auth.login(login_credentials).await {
         Ok(jwt) => Ok(jwt.token),
         Err(e) => {
-            let message = format!("Login failed: {}", e);
+            let message = format!("{}", e);
             Err(GTWError::UnexpectedError(message))
         }
     }

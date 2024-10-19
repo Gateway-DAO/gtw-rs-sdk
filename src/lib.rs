@@ -8,7 +8,7 @@ use surf::{Client, Config, Result};
 pub mod apis;
 mod middleware;
 pub mod models;
-mod services;
+pub mod services;
 mod utils;
 
 pub struct GtwSDK {
@@ -60,7 +60,13 @@ impl GtwSDK {
         let wallet = if sdk_config.bearer_token.is_none() {
             match (sdk_config.wallet, sdk_config.private_key) {
                 (Some(wallet_type), Some(private_key)) => {
-                    Some(WalletService::new(private_key, Some(wallet_type)).await?)
+                    match WalletService::new(private_key, Some(wallet_type)) {
+                        Ok(wallet_service) => Some(wallet_service),
+                        Err(e) => {
+                            eprintln!("Failed to create wallet service: {}", e);
+                            None
+                        }
+                    }
                 }
                 _ => None,
             }
