@@ -14,6 +14,7 @@ pub struct SuiWalletService {
 impl SuiWalletService {
     pub fn new(private_key: &str) -> Result<Self, Box<dyn Error + Send + Sync>> {
         let secret_bytes = hex::decode(private_key)?;
+
         let secret_key = SecretKey::from_bytes(&secret_bytes)?;
 
         let public_key: PublicKey = (&secret_key).into();
@@ -24,6 +25,8 @@ impl SuiWalletService {
         };
 
         let address = public_key.as_bytes().to_base58();
+
+        print!("{:?}", address);
 
         Ok(Self { keypair, address })
     }

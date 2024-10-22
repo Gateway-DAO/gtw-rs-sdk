@@ -53,6 +53,11 @@ pub async fn issue_jwt_token(client: Client, wallet: &WalletService) -> Result<S
         wallet_address: signature_details.signing_key,
     };
 
+    print!(
+        "message : {:?}  \n signature :  {:?}  \n wallet address: {:?} \n ",
+        login_credentials.message, login_credentials.signature, login_credentials.wallet_address
+    );
+
     match auth.login(login_credentials).await {
         Ok(jwt) => Ok(jwt.token),
         Err(e) => {
