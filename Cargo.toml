@@ -22,3 +22,5 @@ ed25519-dalek = "1.0.1"
 base58 = "0.2"
 bs58 = "0.5.1"
 
+[dev-dependencies]
+mockito = "0.31"

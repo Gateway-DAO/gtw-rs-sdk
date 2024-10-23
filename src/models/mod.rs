@@ -29,6 +29,36 @@ pub mod error {
         }
     }
 }
+#[doc = "DtoAcceptedDataAssetResponse"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"accepted_by\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"data_asset_id\": {"]
+#[doc = "      \"type\": \"integer\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DtoAcceptedDataAssetResponse {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub accepted_by: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub data_asset_id: Option<i64>,
+}
+impl From<&DtoAcceptedDataAssetResponse> for DtoAcceptedDataAssetResponse {
+    fn from(value: &DtoAcceptedDataAssetResponse) -> Self {
+        value.clone()
+    }
+}
 #[doc = "DtoAccountCreateRequest"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -236,7 +266,7 @@ impl From<&DtoComputeRequestCreateRequest> for DtoComputeRequestCreateRequest {
         value.clone()
     }
 }
-#[doc = "DtoComputeRequestCreateResponse"]
+#[doc = "DtoComputeRequestResponse"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
@@ -244,6 +274,12 @@ impl From<&DtoComputeRequestCreateRequest> for DtoComputeRequestCreateRequest {
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
+#[doc = "    \"accepted_data_assets\": {"]
+#[doc = "      \"type\": \"array\","]
+#[doc = "      \"items\": {"]
+#[doc = "        \"$ref\": \"#/definitions/dto.AcceptedDataAssetResponse\""]
+#[doc = "      }"]
+#[doc = "    },"]
 #[doc = "    \"compute_field_name\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
@@ -276,7 +312,9 @@ impl From<&DtoComputeRequestCreateRequest> for DtoComputeRequestCreateRequest {
 #[doc = r" ```"]
 #[doc = r" </details>"]
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct DtoComputeRequestCreateResponse {
+pub struct DtoComputeRequestResponse {
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub accepted_data_assets: Vec<DtoAcceptedDataAssetResponse>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub compute_field_name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -296,8 +334,8 @@ pub struct DtoComputeRequestCreateResponse {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
 }
-impl From<&DtoComputeRequestCreateResponse> for DtoComputeRequestCreateResponse {
-    fn from(value: &DtoComputeRequestCreateResponse) -> Self {
+impl From<&DtoComputeRequestResponse> for DtoComputeRequestResponse {
+    fn from(value: &DtoComputeRequestResponse) -> Self {
         value.clone()
     }
 }

@@ -1,7 +1,9 @@
 use std::error::Error;
 use surf::utils::async_trait;
 
-use super::{ethereum::EthereumService, solana::SolanaWalletService, sui::SuiWalletService};
+use crate::WalletType;
+
+use super::{ethereum::EthereumService, solana::SolanaWalletService};
 
 #[async_trait]
 pub trait BlockchainWallet {
@@ -12,11 +14,7 @@ pub trait BlockchainWallet {
 }
 
 #[derive(Clone, Debug)]
-pub enum WalletType {
-    Ethereum,
-    Sui,
-    Solana,
-}
+
 
 pub struct WalletSignMessage {
     pub signature: String,
@@ -35,7 +33,7 @@ impl WalletService {
         let wallet: Box<dyn BlockchainWallet + Send + Sync> =
             match wallet_type.unwrap_or(WalletType::Ethereum) {
                 WalletType::Ethereum => Box::new(EthereumService::new(&wallet_private_key)?),
-                WalletType::Sui => Box::new(SuiWalletService::new(&wallet_private_key)?),
+                // WalletType::Sui => Box::new(SuiWalletService::new(&wallet_private_key)?),
                 WalletType::Solana => Box::new(SolanaWalletService::new(&wallet_private_key)?),
             };
 

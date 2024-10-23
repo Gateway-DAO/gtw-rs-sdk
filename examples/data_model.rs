@@ -1,5 +1,5 @@
 use dotenv::dotenv;
-use gtw_rs_sdk::{models::DtoDataModelCreateRequest, GtwSDK};
+use gtw_rs_sdk::{models::DtoDataModelCreateRequest, GtwSDK, SdkConfig};
 use serde_json::{json, Map};
 use std::env;
 use tokio;
@@ -8,13 +8,23 @@ use tokio;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
-    let bearer_token = env::var("BEARER_TOKEN").expect("BEARER_TOKEN is not set");
-    let gtw_sdk = GtwSDK::new(Some(bearer_token)).await?;
+    let bearer_token = env::var("BEARER_TOKEN").expect("BEARER_TOKEN must be set in environment");
+    let api_url =
+        env::var("API_URL").unwrap_or_else(|_| "https://dev.api.gateway.tech".to_string());
+
+    let sdk_config = SdkConfig {
+        api_url: Some(api_url),
+        bearer_token: Some(bearer_token),
+        wallet: None,
+        private_key: None,
+    };
+
+    let gtw_sdk = GtwSDK::new(sdk_config).await?;
 
     // Retrieve all data models
     match gtw_sdk.data_model.get_all(None, None).await {
         Ok(paginated_response) => {
-            println!("Data Models Retrieved: {:?}", paginated_response.links);
+            println!("Data Models Retrieved: {:?}", paginated_response.data);
         }
         Err(e) => {
             eprintln!("Failed to retrieve data models: {}", e);

@@ -2,14 +2,21 @@ use apis::account::AccountOperationsClient;
 use apis::auth::AuthOperationsClient;
 use apis::data_model::DataModelOperationsClient;
 use middleware::{auth_middleware::AuthMiddleware, header_middlware::HeaderMiddleware};
-use services::wallet::{WalletService, WalletType};
+use services::wallet::WalletService;
 use surf::{Client, Config, Result};
 
 pub mod apis;
 mod middleware;
 pub mod models;
-pub mod services;
+mod services;
 mod utils;
+
+#[derive(Clone, Debug)]
+pub enum WalletType {
+    Ethereum,
+    // Sui,
+    Solana,
+}
 
 pub struct GtwSDK {
     pub auth: AuthOperationsClient,
